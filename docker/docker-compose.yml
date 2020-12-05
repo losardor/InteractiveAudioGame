@@ -18,7 +18,7 @@ services:
         - FLASK_CONFIG=development 
         - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
         - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
-
+      command: gunicorn --bind 0.0.0.0:5000 manage:app
       depends_on: 
         - redis
         - db
@@ -37,6 +37,27 @@ services:
       restart: always
       ports:
         - 8080:8080
+
+    worker:
+      build: 
+        context: ../
+        dockerfile: ./docker/Dockerfile
+
+      volumes:
+        - ..:/code
+      environment: 
+        - SECRET_KEY=387c18ea9f3dd4bf7636ba7fcd8a444d
+        - REDISTOGO_URL=http://redis:6379
+        - FLASK_CONFIG=development 
+        - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
+        - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
+
+      entrypoint: ["python", "-u", "manage.py", "run_worker"]
+
+      depends_on: 
+        - redis
+        - db
+
 volumes:
   pgdata_dev:
     driver: local
