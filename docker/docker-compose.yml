@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+    redis:
+        image: "redis"
+        ports:
+          - "6379:6379"
+    flask:
+      build: 
+        context: ../
+        dockerfile: ./docker/Dockerfile
+      ports:
+        - "5000:5000"
+      volumes:
+        - ..:/code
+      environment: 
+        - SECRET_KEY=387c18ea9f3dd4bf7636ba7fcd8a444d
+        - REDISTOGO_URL=http://redis:6379
+        - FLASK_CONFIG=development 
+        - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
+        - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
+
+      depends_on: 
+        - redis
+        - db
+    db:
+      image: postgres
+      restart: always
+      volumes:
+        - pgdata_dev:/var/lib/postgresql/data
+      environment:
+        POSTGRES_PASSWORD: p_pwd
+        POSTGRES_USER: puser
+        POSTGRES_DB: dev
+
+    adminer:
+      image: adminer
+      restart: always
+      ports:
+        - 8080:8080
+volumes:
+  pgdata_dev:
+    driver: local
+
+              
+  
