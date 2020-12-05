@@ -16,7 +16,9 @@ services:
         - SECRET_KEY=387c18ea9f3dd4bf7636ba7fcd8a444d
         - REDISTOGO_URL=http://redis:6379
         - FLASK_CONFIG=development 
-        - DATABASE_URL=postgres://puser:p_pwd@db:5432/test
+        - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
+        - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
+
       depends_on: 
         - redis
         - db
@@ -24,11 +26,11 @@ services:
       image: postgres
       restart: always
       volumes:
-        - pgdata:/var/lib/postgresql/data
+        - pgdata_dev:/var/lib/postgresql/data
       environment:
         POSTGRES_PASSWORD: p_pwd
         POSTGRES_USER: puser
-        POSTGRES_DB: test
+        POSTGRES_DB: dev
 
     adminer:
       image: adminer
@@ -36,7 +38,8 @@ services:
       ports:
         - 8080:8080
 volumes:
-  pgdata:
+  pgdata_dev:
     driver: local
+
               
   
