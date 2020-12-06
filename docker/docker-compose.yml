@@ -18,6 +18,9 @@ services:
         - FLASK_CONFIG=development 
         - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
         - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
+        - MAIL_SERVER=mail_server
+        - MAIL_PORT=25
+        - MAIL_USERNAME=noreply@interactiveaudiobooks.com
       command: gunicorn --bind 0.0.0.0:5000 manage:app
       depends_on: 
         - redis
@@ -51,12 +54,24 @@ services:
         - FLASK_CONFIG=development 
         - DATABASE_URL=postgres://puser:p_pwd@db:5432/production
         - DEV_DATABASE_URL=postgres://puser:p_pwd@db:5432/dev
+        - MAIL_SERVER=mail_server
+        - MAIL_PORT=25
+        - MAIL_USERNAME=noreply@interactiveaudiobooks.com
+
 
       entrypoint: ["python", "-u", "manage.py", "run_worker"]
 
       depends_on: 
         - redis
         - db
+
+    mail_server:
+      image:  djfarrelly/maildev
+      ports: 
+        - 8081:80
+        - 25
+   
+   
 
 volumes:
   pgdata_dev:
