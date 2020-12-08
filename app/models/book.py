@@ -6,5 +6,6 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(256), unique=True)
+    author = db.Column(db.String(64), unique=True)
 
     
