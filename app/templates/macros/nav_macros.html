@@ -28,9 +28,10 @@
     {% if current_user.is_authenticated %}
       {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
     {% endif %}
+    {% set app_pages = [] %}
     {% if current_user.is_authenticated %}
-      {% set app_pages = [
-      ('books.index',"Books",'book')] %}
+        {% set app_pages = [
+        ('books.index',"Books",'book')] %}
     {% endif %}
     {{ render_menu_items( endpoints + app_pages+ user ) }}
 {% endmacro %}
