@@ -54,7 +54,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    books = db.relationship('Book', backref='author', lazy='dynamic')
+    books = db.relationship('Book', backref='owner', lazy='dynamic')
 
 
     def __init__(self, **kwargs):
