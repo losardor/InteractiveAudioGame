@@ -6,29 +6,31 @@
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
             <h2 class="ui header">
-              Booklist
+                Booklist
             </h2>
-          
-            <div class="ui two column stackable grid">    
-            {% for book in books %}
-            <a class="column">
-                <div class="ui padded segment">
-                    <h3 class="ui header">
-                        <div class="content">
-                            {{ book.name }}
-                            {% if book.description is not none %}
-                            <div class="sub header">
-                            {{ book.description }}
+
+            <div class="ui two column stackable grid">
+                {% for book in books %}
+                    <a class="column">
+                        <div class="ui padded segment">
+                            <h3 class="ui header">
+                                <div class="content">
+                                    {{ book.name }}
+                                    <div class="sub header italic">
+                                        {{ book.owner.full_name() }}
+                                    </div>
+                                </div>
+                            </h3>
+                            <div class="content">
+                                {{ book.description }}
                             </div>
-                             {% endif %}
+
                         </div>
-                    </h3>
-                </div>
-             </a>
-            {% endfor %} 
+                    </a>
+                {% endfor %}
 
             </div>
-    
+
         </div>
     </div>
 {% endblock %}
