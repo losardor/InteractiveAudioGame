@@ -20,6 +20,18 @@ def index():
     thebooks = Book.query.all()
     return render_template('books/index.html', books=thebooks)
 
+
+@books.route('/info/<int:book_id>')
+@login_required
+def book_info(book_id):
+    """view a book page"""
+    book = Book.query.filter_by(id=book_id).first()
+    if book is None:
+        abort(404)
+    return render_template('books/book_info.html', book=book)
+
+
+
 @books.route('/addnew', methods=["GET", "POST"])
 @login_required
 def addnew():
