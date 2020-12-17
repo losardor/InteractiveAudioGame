@@ -31,7 +31,7 @@ def addnew():
         book = Book(
             name=form.title.data,
             description=form.description.data,
-            author_id=current_user.id)
+            owner_id=current_user.id)
         db.session.add(book)
         db.session.commit()
         flash('Book {} successfully created'.format(book.name),
