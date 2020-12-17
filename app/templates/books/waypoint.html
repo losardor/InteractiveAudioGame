@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+{% import 'books/book_info.html' as b%}
+
+{% block content%}
+{{ b.book_info(book) }}
+<div class="ui hidden divider"></div>
+<div class="main ui intro container">
+{{ b.render_waypoint(waypoint)}}
+{{ b.render_options(options)}}    
+</div>
+
+
+
+{% endblock %}

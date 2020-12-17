@@ -1,20 +1,19 @@
-{% extends 'layouts/base.html' %}
+{% macro book_info(book) %}
+<div class="ui masthead container ">
+    <h1 class="ui  header">
+        {{book.name}}    
+    <span class="sub header">by {{book.owner.full_name()}}</span>
+    </h1>
+    <p>
+        {{book.description}}
+    </p>
+  </div>
+{% endmacro %}
 
+{% macro render_options(options)%}
+<div></div>
+{% endmacro %}
 
-
-{% block content %}
-    <div class="ui stackable centered grid container">
-        <div class="twelve wide column">
-            <h2 class="ui header">
-                {{book.name}}
-            </h2>
-            <h3>by {{book.owner.full_name()}}</h3>
-            <div>
-                {{book.description}}
-            </div>
-
-        </div>
-
-        </div>
-    </div>
-{% endblock %}
+{% macro render_waypoint(options)%}
+<div></div>
+{% endmacro %}
