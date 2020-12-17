@@ -6,3 +6,6 @@ module (as opposed to just their python files)
 from .user import *  # noqa
 from .miscellaneous import *  # noqa
 from .book import *
+from .waypoint import *
+from .option import *
+from .content import *
