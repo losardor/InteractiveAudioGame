@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, flash
+from flask import Blueprint, render_template, flash, abort
 from flask_login import login_required
 
 from app.books.forms import NewBookForm
-from app.models import Book, User
+from app.models import Book, User, Waypoint, Option
 from app import db
 
 from app.models import EditableHTML
@@ -30,14 +30,22 @@ def book_info(book_id):
         abort(404)
     return render_template('books/waypoint.html', book=book)
 
-@books.route('/book/<int:book_id>/waypoint/<int:waypoint>')
+@books.route('/book/<int:book_id>/waypoint/<int:waypoint_id>')
 @login_required
-def waypoint(book_id, waypoint):
+def waypoint(book_id, waypoint_id):
     """view a book page"""
     book = Book.query.filter_by(id=book_id).first()
+    waypoint = Waypoint.query.filter_by(id=waypoint_id).first()
+    options = Option.query.filter_by(sourceWaypoint_id=waypoint_id)
     if book is None:
         abort(404)
-    return render_template('books/waypoint.html', book=book, waypoint=waypoint)
+    if waypoint is None:
+        abort(404)
+        
+    if waypoint.book_id != book.id:
+        abort(404)
+        
+    return render_template('books/waypoint.html', book=book, waypoint=waypoint, pippo=options)
 
 
 

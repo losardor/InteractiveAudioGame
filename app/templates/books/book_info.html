@@ -1,19 +1,43 @@
 {% macro book_info(book) %}
 <div class="ui masthead container ">
     <h1 class="ui  header">
-        {{book.name}}    
-    <span class="sub header">by {{book.owner.full_name()}}</span>
+        {{book.name}}
+        <span class="sub header">by {{book.owner.full_name()}}</span>
     </h1>
     <p>
         {{book.description}}
     </p>
-  </div>
+</div>
 {% endmacro %}
 
 {% macro render_options(options)%}
-<div></div>
+<div>
+    {% for option in options %}
+    <a class="column" href=#>
+        <!--"{{ url_for('books.waypoint', book_id=option.id) }}"-->
+        <!--Modifica tutto , questa riga non funzionerà-->
+        <div class="ui padded segment">
+            <h3 class="ui header">
+                <div class="content">
+                    {{ option.sourceWaypoint_id }}
+                </div>
+            </h3>
+            <div class="content">
+                {{ option.linkText }}
+            </div>
+
+        </div>
+    </a>
+    {% endfor %}
+    <p>Metti il testo delle opzioni</p>
+</div>
 {% endmacro %}
 
-{% macro render_waypoint(options)%}
-<div></div>
+{% macro render_waypoint(waypoint)%}
+<div>
+    <p>Metti il testo del waypoint</p>
+    <p>
+        {{waypoint.id}}
+    </p>
+</div>
 {% endmacro %}
