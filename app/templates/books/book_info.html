@@ -7,9 +7,7 @@
     <p>
         {{book.description}}
     </p>
-    {% if not waypoint %}
-    <a href="{{ url_for('books.start_book', book_id=book.id) }}" class="ui green button">STart</a>
-    {% endif %}
+    <a href="{{ url_for('books.start_book', book_id=book.id) }}" class="ui green button">Start/restart</a>
 </div>
 {% endmacro %}
 
