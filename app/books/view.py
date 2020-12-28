@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, abort
 from flask_login import login_required
 
-from app.books.forms import NewBookForm
+from app.books.forms import NewBookForm, NewWayPoint
 from app.models import Book, User, Waypoint, Option
 from app import db
 
@@ -67,3 +67,19 @@ def addnew():
         flash('Book {} successfully created'.format(book.name),
                 'form-success')
     return render_template('books/new_book.html', form=form)
+
+
+@books.route('/book/<int:book_id>/add_point', methods=["GET", "POST"])
+@login_required
+def addnew(book_id):
+    """
+    Adding a new waypoint
+    """
+    form = NewWayPoint()
+    if form.validate_on_submit():
+        wp = Waypoint(book_id=book_id)
+        db.session.add(wp)
+        db.session.commit()
+        flash('wp {} successfully created'.format(wp.id),
+                'form-success')
+    return render_template('books/new_waypoint.html', form=form)

@@ -4,10 +4,13 @@
 {% block content%}
 {{ b.book_info(book) }}
 <div class="ui hidden divider"></div>
+{% if waypoint %}
 <div class="main ui intro container">
     {{ b.render_waypoint(waypoint)}}
     {{ b.render_options(pippo)}}
 </div>
+
+{% endif %}
 
 
 

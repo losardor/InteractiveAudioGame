@@ -30,3 +30,15 @@ class NewBookForm(FlaskForm):
     submit = SubmitField('NewBook')
 
   
+class NewWayPoint(FlaskForm):
+  
+    title = StringField(
+        'Title', validators=[InputRequired(),
+                                  Length(1, 64)])
+    description = TextAreaField(
+        'Description', validators=[InputRequired(),
+                                 Length(1, 256)])
+
+    submit = SubmitField('NewBook')
+
+  
