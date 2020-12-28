@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, abort
+from flask import Blueprint, render_template, flash, abort, redirect, url_for
 from flask_login import login_required
 
 from app.books.forms import NewBookForm, NewWayPoint
@@ -30,22 +30,27 @@ def book_info(book_id):
         abort(404)
     return render_template('books/waypoint.html', book=book)
 
-@books.route('/book/<int:book_id>/waypoint/<int:waypoint_id>')
+@books.route('/book/<int:book_id>/start')
 @login_required
-def waypoint(book_id, waypoint_id):
+def start_book(book_id):
+    """start a new session of the book and display first page"""
+    wp = Waypoint.query.filter_by(book_id=book_id, start=True).first()
+    if wp is None:
+        abort(404)
+    return redirect(url_for("books.waypoint",waypoint_id=wp.id))
+
+@books.route('/waypoint/<int:waypoint_id>')
+@login_required
+def waypoint(waypoint_id):
     """view a book page"""
-    book = Book.query.filter_by(id=book_id).first()
-    waypoint = Waypoint.query.filter_by(id=waypoint_id).first()
+    wp = Waypoint.query.filter_by(id=waypoint_id).first()
     options = Option.query.filter_by(sourceWaypoint_id=waypoint_id)
-    if book is None:
+
+    if wp is None:
         abort(404)
-    if waypoint is None:
-        abort(404)
+
         
-    if waypoint.book_id != book.id:
-        abort(404)
-        
-    return render_template('books/waypoint.html', book=book, waypoint=waypoint, pippo=options)
+    return render_template('books/waypoint.html', book=wp.book_of, waypoint=wp, options=options)
 
 
 

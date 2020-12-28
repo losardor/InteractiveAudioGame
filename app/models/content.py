@@ -5,4 +5,5 @@ class TextContent(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     waypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
+    waypoint = db.relationship("Waypoint", back_populates="content")
     content = db.Column(db.Text)

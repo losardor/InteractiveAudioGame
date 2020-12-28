@@ -7,5 +7,6 @@ class Book(db.Model):
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.Text, unique=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    wp_rel = db.relationship('Waypoint', backref='book_of', lazy='dynamic')
 
     

@@ -7,19 +7,20 @@
     <p>
         {{book.description}}
     </p>
+    {% if not waypoint %}
+    <a href="{{ url_for('books.start_book', book_id=book.id) }}" class="ui green button">STart</a>
+    {% endif %}
 </div>
 {% endmacro %}
 
 {% macro render_options(options)%}
 <div>
     {% for option in options %}
-    <a class="column" href=#>
-        <!--"{{ url_for('books.waypoint', book_id=option.id) }}"-->
-        <!--Modifica tutto , questa riga non funzionerà-->
+    <a class="column" href="{{url_for('books.waypoint', waypoint_id= option.destinationWaypoint_id)}}">
         <div class="ui padded segment">
             <h3 class="ui header">
                 <div class="content">
-                    {{ option.sourceWaypoint_id }}
+                    Link da {{ option.sourceWaypoint_id }} a {{ option.destinationWaypoint_id }}
                 </div>
             </h3>
             <div class="content">
@@ -29,15 +30,14 @@
         </div>
     </a>
     {% endfor %}
-    <p>Metti il testo delle opzioni</p>
 </div>
 {% endmacro %}
 
 {% macro render_waypoint(waypoint)%}
 <div>
-    <p>Metti il testo del waypoint</p>
+    <p></p>
     <p>
-        {{waypoint.id}}
+        {{waypoint.content.content}}
     </p>
 </div>
 {% endmacro %}
