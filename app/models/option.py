@@ -6,4 +6,4 @@ class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sourceWaypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
     destinationWaypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
-    linkText = db.Column(db.Text, unique=True)
+    linkText = db.Column(db.Text)

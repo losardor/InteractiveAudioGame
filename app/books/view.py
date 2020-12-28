@@ -71,7 +71,7 @@ def addnew():
 
 @books.route('/book/<int:book_id>/add_point', methods=["GET", "POST"])
 @login_required
-def addnew(book_id):
+def addnewwp(book_id):
     """
     Adding a new waypoint
     """

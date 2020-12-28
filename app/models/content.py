@@ -5,4 +5,4 @@ class TextContent(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     waypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
-    content = db.Columns(db.Text)
+    content = db.Column(db.Text)
