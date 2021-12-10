@@ -11,6 +11,8 @@ from app import create_app, db
 from app.models import Role, User
 from config import Config
 
+from app.books.loader import JsonFileBookLoader
+
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -117,6 +119,12 @@ def format():
 
     print('Running {}'.format(yapf))
     subprocess.call(yapf, shell=True)
+
+@manager.command
+def load_json_book(file):
+    print("Loading: ", file)
+    JsonFileBookLoader(file).load()
+
 
 
 if __name__ == '__main__':
