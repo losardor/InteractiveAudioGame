@@ -1,13 +1,14 @@
-from flask import Blueprint, render_template, flash, abort, redirect, url_for
+from flask import Blueprint, render_template, flash, abort, redirect, url_for, request
 from flask_login import login_required
 
-from app.books.forms import NewBookForm, NewWayPoint
+from app.books.forms import NewBookForm, NewWayPoint, UploadBookForm
 from app.models import Book, User, Waypoint, Option
 from app import db
 
 from app.models import EditableHTML
 from flask_login import current_user
 from flask import current_app
+from app.books import loader
 
 
 books = Blueprint('books', __name__)
@@ -45,15 +46,9 @@ def waypoint(waypoint_id):
     """view a book page"""
     wp = Waypoint.query.filter_by(id=waypoint_id).first()
     options = Option.query.filter_by(sourceWaypoint_id=waypoint_id)
-
     if wp is None:
         abort(404)
-
-        
     return render_template('books/waypoint.html', book=wp.book_of, waypoint=wp, options=options)
-
-
-
 
 @books.route('/addnew', methods=["GET", "POST"])
 @login_required
@@ -73,6 +68,19 @@ def addnew():
                 'form-success')
     return render_template('books/new_book.html', form=form)
 
+@books.route('/uploadnew', methods=["GET", "POST"])
+@login_required
+def uploadnew():
+    """
+    Uploading a new book
+    """
+    form = UploadBookForm()
+    if form.validate_on_submit():
+        f = form.file.data
+        l = loader.JsonFileBookLoader(f)
+        l.load()
+        flash('Book {} successfully created'.format(l.book.name), 'form-success')
+    return render_template('books/upload_book.html', form=form)
 
 @books.route('/book/<int:book_id>/add_point', methods=["GET", "POST"])
 @login_required

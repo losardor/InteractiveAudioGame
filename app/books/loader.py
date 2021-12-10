@@ -1,4 +1,4 @@
-from app.books.view import waypoint
+# from app.books.view import waypoint
 from app.models.option import Option
 from app.models.waypoint import Waypoint
 from json import load as jload
@@ -26,7 +26,6 @@ class BookLoader():
 
         db.session.commit()
 
-
     def _create_book(self,name,description,**book_dict_kwargs):
         self.book = Book(name=name,description=description,owner_id=1)
         db.session.add(self.book)
@@ -38,9 +37,6 @@ class BookLoader():
             db.session.add(new_wp)
             db.session.flush()
             self.wp_mapping[wp["id"]] = new_wp.id
-
-
-            
 
     def _create_options(self,waypoints,**bool_dict_kwargs):
         for wp in waypoints:
@@ -68,10 +64,10 @@ class BookLoader():
 
 class JsonFileBookLoader(BookLoader):
 
-    def __init__(self,file_name):
-        with open(file_name,"r") as json_file:
-            book_dict = jload(json_file)
-
+    def __init__(self,file):
+        # with open(file_name,"r") as json_file:
+        #     book_dict = jload(json_file)
+        book_dict = jload(file)
         super().__init__(book_dict)
 
     

@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields import (
@@ -29,7 +30,10 @@ class NewBookForm(FlaskForm):
 
     submit = SubmitField('NewBook')
 
-  
+class UploadBookForm(FlaskForm):
+    file = FileField(validators=[FileRequired()])
+    submit = SubmitField('Upload')
+
 class NewWayPoint(FlaskForm):
   
     title = StringField(
