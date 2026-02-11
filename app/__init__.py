@@ -62,10 +62,8 @@ def create_app(config):
     assets_env.register('vendor_css', vendor_css)
     assets_env.register('vendor_js', vendor_js)
 
-    # Configure SSL if platform supports it
-    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
-        from flask_sslify import SSLify
-        SSLify(app)
+    # SSL handling removed — Flask-SSLify is deprecated.
+    # Add Flask-Talisman in a future commit if HTTPS enforcement is needed.
 
     # Create app blueprints
     from .main import main as main_blueprint

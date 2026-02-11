@@ -1,13 +1,5 @@
 import os
-import sys
-
-from raygun4py.middleware import flask as flask_raygun
-
-PYTHON_VERSION = sys.version_info[0]
-if PYTHON_VERSION == 3:
-    import urllib.parse
-else:
-    import urlparse
+import urllib.parse
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -27,8 +19,6 @@ class Config:
     else:
         SECRET_KEY = 'SECRET_KEY_ENV_VAR_NOT_SET'
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
     MAIL_PORT = os.environ.get('MAIL_PORT', 587)
@@ -52,15 +42,9 @@ class Config:
 
     REDIS_URL = os.getenv('REDISTOGO_URL', 'http://localhost:6379')
 
-    RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
-
     # Parse the REDIS_URL to set RQ config variables
-    if PYTHON_VERSION == 3:
-        urllib.parse.uses_netloc.append('redis')
-        url = urllib.parse.urlparse(REDIS_URL)
-    else:
-        urlparse.uses_netloc.append('redis')
-        url = urlparse.urlparse(REDIS_URL)
+    urllib.parse.uses_netloc.append('redis')
+    url = urllib.parse.urlparse(REDIS_URL)
 
     RQ_DEFAULT_HOST = url.hostname
     RQ_DEFAULT_PORT = url.port
@@ -108,7 +92,7 @@ class ProductionConfig(Config):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
-        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
+        pass
 
 
 class HerokuConfig(ProductionConfig):
@@ -117,7 +101,7 @@ class HerokuConfig(ProductionConfig):
         ProductionConfig.init_app(app)
 
         # Handle proxy server headers
-        from werkzeug.contrib.fixers import ProxyFix
+        from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
