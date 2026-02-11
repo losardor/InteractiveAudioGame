@@ -12,7 +12,7 @@ from flask_login import (
     login_user,
     logout_user,
 )
-from flask_rq import get_queue
+from app import get_queue
 
 from app import db
 from app.account.forms import (

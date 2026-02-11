@@ -5,7 +5,6 @@ from flask_assets import Environment
 from flask_compress import Compress
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_rq import RQ
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 
@@ -18,6 +17,19 @@ mail = Mail()
 db = SQLAlchemy()
 csrf = CSRFProtect()
 compress = Compress()
+
+
+def get_queue():
+    """Get an RQ queue connected to the configured Redis instance."""
+    from flask import current_app
+    from redis import Redis
+    from rq import Queue
+    conn = Redis(
+        host=current_app.config['RQ_DEFAULT_HOST'],
+        port=current_app.config['RQ_DEFAULT_PORT'],
+        db=current_app.config.get('RQ_DEFAULT_DB', 0),
+        password=current_app.config['RQ_DEFAULT_PASSWORD'])
+    return Queue(connection=conn)
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -44,7 +56,6 @@ def create_app(config):
     login_manager.init_app(app)
     csrf.init_app(app)
     compress.init_app(app)
-    RQ(app)
 
     # Register Jinja template functions
     from .utils import register_template_utils

@@ -5,7 +5,7 @@ import subprocess
 import click
 from flask_migrate import Migrate
 from redis import Redis
-from rq import Connection, Queue, Worker
+from rq import Queue, Worker
 
 from app import create_app, db
 from app.models import Role, User
@@ -92,9 +92,9 @@ def run_worker():
         db=0,
         password=app.config['RQ_DEFAULT_PASSWORD'])
 
-    with Connection(conn):
-        worker = Worker(map(Queue, listen))
-        worker.work()
+    queues = [Queue(name, connection=conn) for name in listen]
+    worker = Worker(queues, connection=conn)
+    worker.work()
 
 
 @app.cli.command()
