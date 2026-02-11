@@ -40,6 +40,10 @@ class Config:
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
 
+    # Audio uploads
+    AUDIO_UPLOAD_DIR = os.path.join(basedir, 'app', 'static', 'audio')
+    MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB upload limit
+
     REDIS_URL = os.getenv('REDISTOGO_URL', 'http://localhost:6379')
 
     # Parse the REDIS_URL to set RQ config variables
