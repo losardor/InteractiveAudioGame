@@ -8,10 +8,23 @@
 <div class="main ui intro container">
     {{ b.render_waypoint(waypoint)}}
     {{ b.render_options(options)}}
+
+    {% if audio_form %}
+    <div class="ui hidden divider"></div>
+    <div class="ui segment">
+        <h4 class="ui header">Upload Audio</h4>
+        <form method="POST" action="{{ url_for('books.upload_audio', waypoint_id=waypoint.id) }}" enctype="multipart/form-data">
+            {{ audio_form.hidden_tag() }}
+            <div class="field">
+                {{ audio_form.audio_file.label }}
+                {{ audio_form.audio_file() }}
+            </div>
+            {{ audio_form.submit(class="ui blue button") }}
+        </form>
+    </div>
+    {% endif %}
 </div>
 
 {% endif %}
-
-
 
 {% endblock %}

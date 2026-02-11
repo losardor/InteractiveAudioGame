@@ -28,6 +28,14 @@ class UploadBookForm(FlaskForm):
     file = FileField(validators=[FileRequired()])
     submit = SubmitField('Upload')
 
+class AudioUploadForm(FlaskForm):
+    audio_file = FileField('Audio File', validators=[
+        FileRequired(),
+        FileAllowed(['mp3', 'ogg', 'wav'], 'Audio files only (.mp3, .ogg, .wav)')
+    ])
+    submit = SubmitField('Upload Audio')
+
+
 class NewWayPoint(FlaskForm):
   
     title = StringField(

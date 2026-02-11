@@ -7,6 +7,9 @@
     <p>
         {{book.description}}
     </p>
+    {% if start_waypoint %}
+    <a href="{{ url_for('books.play_waypoint', book_id=book.id, waypoint_id=start_waypoint.id) }}" class="ui teal button"><i class="play icon"></i> Listen</a>
+    {% endif %}
     <a href="{{ url_for('books.start_book', book_id=book.id) }}" class="ui green button">Start/restart</a>
 </div>
 {% endmacro %}
@@ -37,5 +40,13 @@
     <p>
         {{waypoint.content.content}}
     </p>
+    {% if waypoint.content.audio_url %}
+    <div class="ui segment">
+        <audio controls preload="metadata" style="width: 100%;">
+            <source src="{{ waypoint.content.audio_url }}" />
+            Your browser does not support audio playback.
+        </audio>
+    </div>
+    {% endif %}
 </div>
 {% endmacro %}

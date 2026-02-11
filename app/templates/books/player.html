@@ -1,0 +1,223 @@
+{% extends 'layouts/base.html' %}
+
+{% block custom_head_tags %}
+<style>
+    body.player-page {
+        background: #1a1a2e;
+        color: #e0e0e0;
+        min-height: 100vh;
+    }
+    .player-container {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 24px 16px;
+    }
+    .player-book-title {
+        text-align: center;
+        color: #8888aa;
+        font-size: 0.9em;
+        margin-bottom: 24px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .player-audio {
+        width: 100%;
+        margin-bottom: 24px;
+        border-radius: 8px;
+    }
+    .player-audio audio {
+        width: 100%;
+    }
+    .player-transcript {
+        margin-bottom: 24px;
+    }
+    .transcript-toggle {
+        background: none;
+        border: 1px solid #444;
+        color: #aaa;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85em;
+        width: 100%;
+        text-align: left;
+    }
+    .transcript-toggle:hover {
+        border-color: #888;
+        color: #ddd;
+    }
+    .transcript-text {
+        display: none;
+        padding: 16px;
+        margin-top: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        line-height: 1.7;
+        font-size: 1.05em;
+    }
+    .transcript-text.open {
+        display: block;
+    }
+    .no-audio-text {
+        padding: 24px 0;
+        line-height: 1.7;
+        font-size: 1.1em;
+    }
+    #choices {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #choices.hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+    }
+    #choices.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .choice-btn {
+        display: block;
+        width: 100%;
+        padding: 20px 24px;
+        margin-bottom: 12px;
+        background: #16213e;
+        border: 1px solid #0f3460;
+        border-radius: 12px;
+        color: #e0e0e0;
+        font-size: 1.1em;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .choice-btn:hover {
+        background: #0f3460;
+        border-color: #e94560;
+        color: #fff;
+    }
+    .skip-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 0.8em;
+        cursor: pointer;
+        margin: 16px auto;
+        padding: 8px 16px;
+    }
+    .skip-btn:hover {
+        color: #aaa;
+    }
+    .story-end {
+        text-align: center;
+        padding: 32px 0;
+    }
+    .story-end h2 {
+        color: #8888aa;
+        margin-bottom: 24px;
+    }
+    .library-btn {
+        display: inline-block;
+        padding: 14px 32px;
+        background: #0f3460;
+        border: 1px solid #0f3460;
+        border-radius: 12px;
+        color: #e0e0e0;
+        font-size: 1em;
+        text-decoration: none;
+    }
+    .library-btn:hover {
+        background: #16213e;
+        border-color: #e94560;
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<script>document.body.classList.add('player-page');</script>
+
+<div class="player-container">
+    <div class="player-book-title">{{ book.name }}</div>
+
+    {% if audio_url %}
+    <div class="player-audio">
+        <audio id="story-audio" controls autoplay preload="auto">
+            <source src="{{ audio_url }}" />
+            Your browser does not support audio playback.
+        </audio>
+    </div>
+
+    {% if text_content %}
+    <div class="player-transcript">
+        <button class="transcript-toggle" id="transcript-btn">Show transcript</button>
+        <div class="transcript-text" id="transcript">{{ text_content }}</div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    {% if text_content %}
+    <div class="no-audio-text">{{ text_content }}</div>
+    {% endif %}
+    {% endif %}
+
+    {% if options %}
+    <div id="choices" class="{% if audio_url %}hidden{% else %}visible{% endif %}">
+        {% for option in options %}
+        <a class="choice-btn"
+           href="{{ url_for('books.play_waypoint', book_id=book.id, waypoint_id=option.destinationWaypoint_id) }}">
+            {{ option.linkText }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if audio_url %}
+    <button class="skip-btn" id="skip-btn">Show choices early</button>
+    {% endif %}
+
+    {% else %}
+    <div class="story-end">
+        <h2>The End</h2>
+        <a class="library-btn" href="{{ url_for('books.index') }}">Return to library</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+(function() {
+    var audio = document.getElementById('story-audio');
+    var choices = document.getElementById('choices');
+    var skipBtn = document.getElementById('skip-btn');
+    var transcriptBtn = document.getElementById('transcript-btn');
+    var transcript = document.getElementById('transcript');
+
+    function revealChoices() {
+        if (choices) {
+            choices.classList.remove('hidden');
+            choices.classList.add('visible');
+        }
+        if (skipBtn) {
+            skipBtn.style.display = 'none';
+        }
+    }
+
+    if (audio) {
+        audio.addEventListener('ended', revealChoices);
+    }
+
+    if (skipBtn) {
+        skipBtn.addEventListener('click', revealChoices);
+    }
+
+    if (transcriptBtn && transcript) {
+        transcriptBtn.addEventListener('click', function() {
+            transcript.classList.toggle('open');
+            transcriptBtn.textContent = transcript.classList.contains('open')
+                ? 'Hide transcript' : 'Show transcript';
+        });
+    }
+})();
+</script>
+{% endblock %}
