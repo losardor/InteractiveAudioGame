@@ -95,19 +95,20 @@ Content type `"text"` is the only implemented type. Future types: `"audio"`, `"t
 
 ## Running Locally
 
-**With Docker (preferred):**
+**With Docker (preferred and canonical):**
 ```bash
 cd docker
 docker-compose up --build
 ```
 App at http://localhost:5000, Adminer at http://localhost:8080, Maildev at http://localhost:8081.
 
-**Without Docker:**
+**Without Docker (requires local venv — NOT currently set up):**
 ```bash
 export FLASK_APP=manage.py
 export FLASK_CONFIG=development
 flask run --host=0.0.0.0 --port=5000
 ```
+Note: Running locally without Docker requires a virtual environment with all dependencies installed. The pinned 2019 dependency versions in `requirements.txt` may not compile on Python 3.10+. Until dependencies are modernized (Step 1 of the roadmap), **use Docker for all testing and running.**
 
 **CLI commands:**
 ```bash
@@ -118,6 +119,58 @@ flask add-fake-data -n 20  # Generate fake users
 flask load-json-book <file.json>  # Import a book from JSON
 flask run-worker         # Start RQ background worker
 ```
+
+## Testing
+
+### Test Environment
+
+**Docker is the canonical test environment.** There is no local virtual environment set up, and the 2019-era pinned dependencies may not install on the host machine's Python (3.10). All tests must be run inside the Docker container until the dependency modernization (Roadmap Step 1) is complete.
+
+### Running Tests
+
+```bash
+# Build and run tests inside Docker (one-shot, no leftover container)
+cd docker
+docker-compose build flask
+docker-compose run --rm flask flask test
+```
+
+For interactive debugging inside the container:
+```bash
+docker-compose run --rm flask bash
+# then inside the container:
+export FLASK_APP=manage.py
+export FLASK_CONFIG=testing
+flask test
+```
+
+### Existing Test Suite
+
+Tests live in `tests/` and are auto-discovered by `unittest.TestLoader().discover('tests')`.
+
+| File | Tests | What it covers |
+|------|-------|----------------|
+| `test_basics.py` | 2 | App factory boots, testing config is active |
+| `test_user_model.py` | 16 | Password hashing, confirmation/reset/email-change tokens, roles & permissions, anonymous user |
+
+Total: **18 tests**. All use SQLite in-memory via the `testing` config. No external services (Postgres, Redis) needed.
+
+### Verification Protocol for Modernization Commits
+
+After each infrastructure commit, run this sequence:
+
+1. **Syntax check** (fast, no Docker): `python3 -c "import ast; ast.parse(open('manage.py').read())"`
+2. **Full test suite** (Docker): `docker-compose run --rm flask flask test`
+3. **App boot check** (Docker): `docker-compose run --rm flask flask --help` — should list all registered CLI commands
+4. **Smoke test** (Docker): `docker-compose up` then visit http://localhost:5000
+
+All 18 tests must pass. Any failure means the commit broke something — fix before moving on.
+
+### CI / GitHub Actions
+
+File: `.github/workflows/run_tests.yml`
+
+Currently **broken** — still references `python manage.py test` (pre-Flask-CLI). Needs updating to `flask test` with `FLASK_APP=manage.py` set. Tracked as a task in the modernization roadmap.
 
 ## Known Technical Debt (being addressed)
 
