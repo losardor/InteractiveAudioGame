@@ -21,7 +21,8 @@ services:
         - MAIL_SERVER=mail_server
         - MAIL_PORT=25
         - MAIL_USERNAME=noreply@interactiveaudiobooks.com
-      entrypoint: ["python", "manage.py","runserver"]
+        - FLASK_APP=manage.py
+      entrypoint: ["flask", "run", "--host=0.0.0.0", "--port=5000"]
       depends_on: 
         - redis
         - db
@@ -57,9 +58,9 @@ services:
         - MAIL_SERVER=mail_server
         - MAIL_PORT=25
         - MAIL_USERNAME=noreply@interactiveaudiobooks.com
+        - FLASK_APP=manage.py
 
-
-      entrypoint: ["python", "-u", "manage.py", "run_worker"]
+      entrypoint: ["flask", "run-worker"]
 
       depends_on: 
         - redis

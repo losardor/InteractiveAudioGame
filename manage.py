@@ -2,8 +2,8 @@
 import os
 import subprocess
 
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager, Shell
+import click
+from flask_migrate import Migrate
 from redis import Redis
 from rq import Connection, Queue, Worker
 
@@ -14,22 +14,15 @@ from config import Config
 from app.books.loader import JsonFileBookLoader
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-manager = Manager(app)
 migrate = Migrate(app, db)
 
-@manager.command
-def runserver():
-    app.run(debug=True, host="0.0.0.0", port=5000)
 
+@app.shell_context_processor
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role)
+    return dict(db=db, User=User, Role=Role)
 
 
-manager.add_command('shell', Shell(make_context=make_shell_context))
-manager.add_command('db', MigrateCommand)
-
-
-@manager.command
+@app.cli.command()
 def test():
     """Run the unit tests."""
     import unittest
@@ -38,7 +31,7 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
-@manager.command
+@app.cli.command('recreate-db')
 def recreate_db():
     """
     Recreates a local database. You probably should not use this on
@@ -49,13 +42,9 @@ def recreate_db():
     db.session.commit()
 
 
-@manager.option(
-    '-n',
-    '--number-users',
-    default=10,
-    type=int,
-    help='Number of each model type to create',
-    dest='number_users')
+@app.cli.command('add-fake-data')
+@click.option('-n', '--number-users', default=10, type=int,
+              help='Number of each model type to create')
 def add_fake_data(number_users):
     """
     Adds fake data to the database.
@@ -63,13 +52,13 @@ def add_fake_data(number_users):
     User.generate_fake(count=number_users)
 
 
-@manager.command
+@app.cli.command('setup-dev')
 def setup_dev():
     """Runs the set-up needed for local development."""
     setup_general()
 
 
-@manager.command
+@app.cli.command('setup-prod')
 def setup_prod():
     """Runs the set-up needed for production."""
     setup_general()
@@ -93,7 +82,7 @@ def setup_general():
             print('Added administrator {}'.format(user.full_name()))
 
 
-@manager.command
+@app.cli.command('run-worker')
 def run_worker():
     """Initializes a slim rq task queue."""
     listen = ['default']
@@ -108,7 +97,7 @@ def run_worker():
         worker.work()
 
 
-@manager.command
+@app.cli.command()
 def format():
     """Runs the yapf and isort formatters over the project."""
     isort = 'isort -rc *.py app/'
@@ -120,12 +109,13 @@ def format():
     print('Running {}'.format(yapf))
     subprocess.call(yapf, shell=True)
 
-@manager.command
+
+@app.cli.command('load-json-book')
+@click.argument('file')
 def load_json_book(file):
     print("Loading: ", file)
     JsonFileBookLoader(file).load()
 
 
-
 if __name__ == '__main__':
-    manager.run()
+    app.run(debug=True)
