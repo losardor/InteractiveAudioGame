@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block custom_head_tags %}
-<meta name="theme-color" content="#1a1a2e">
+<meta name="theme-color" content="#1C1C2E">
 <style>
     .player-container {
         max-width: 480px;
@@ -10,7 +10,9 @@
     }
     .player-book-title {
         text-align: center;
-        color: #8888aa;
+        color: #8A8A8A;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
         font-size: 0.85em;
         margin-bottom: 24px;
         letter-spacing: 0.08em;
@@ -21,10 +23,10 @@
         text-decoration: none;
     }
     .player-book-title a:hover {
-        color: #aaaacc;
+        color: #FFFFFF;
     }
     .player-audio {
-        background: #16213e;
+        background: #252540;
         border-radius: 16px;
         padding: 20px;
         margin-bottom: 16px;
@@ -44,7 +46,7 @@
         width: 100%;
         background: none;
         border: 1px solid #333355;
-        color: #8888aa;
+        color: #8A8A8A;
         padding: 12px 16px;
         border-radius: 8px;
         cursor: pointer;
@@ -54,8 +56,8 @@
         min-height: 48px;
     }
     .transcript-toggle:hover {
-        border-color: #5555aa;
-        color: #aaaacc;
+        border-color: #E8734A;
+        color: #FFFFFF;
     }
     .transcript-text {
         max-height: 0;
@@ -64,7 +66,7 @@
         padding: 0 8px;
         line-height: 1.7;
         font-size: 1em;
-        color: #ccccdd;
+        color: #FFFFFF;
     }
     .transcript-text.open {
         max-height: 800px;
@@ -74,7 +76,7 @@
         padding: 20px 4px;
         line-height: 1.7;
         font-size: 1.05em;
-        color: #ccccdd;
+        color: #FFFFFF;
     }
     #choices {
         transition: opacity 0.4s ease, transform 0.4s ease;
@@ -96,7 +98,7 @@
         width: 100%;
         padding: 16px 20px;
         margin-bottom: 12px;
-        background: linear-gradient(135deg, #e85d04, #dc2f02);
+        background: #3CC8A0;
         border: none;
         border-radius: 12px;
         color: #fff;
@@ -111,7 +113,8 @@
     }
     .choice-btn:hover {
         transform: scale(1.02);
-        box-shadow: 0 4px 20px rgba(232, 93, 4, 0.3);
+        background: #33B08A;
+        box-shadow: 0 4px 20px rgba(60, 200, 160, 0.3);
         color: #fff;
     }
     .choice-btn:active {
@@ -120,8 +123,8 @@
     .skip-btn {
         display: block;
         background: none;
-        border: 1px solid #444466;
-        color: #8888aa;
+        border: 1px solid #333355;
+        color: #8A8A8A;
         font-size: 0.85em;
         cursor: pointer;
         margin: 8px auto 20px;
@@ -130,32 +133,32 @@
         min-height: 48px;
     }
     .skip-btn:hover {
-        border-color: #6666aa;
-        color: #aaaacc;
+        border-color: #E8734A;
+        color: #FFFFFF;
     }
     .story-end {
         text-align: center;
         padding: 32px 0;
     }
     .story-end h2 {
-        color: #e0e0e0;
+        color: #FFFFFF;
         font-size: 1.5em;
         margin-bottom: 24px;
     }
     .library-btn {
         display: inline-block;
         padding: 14px 32px;
-        border: 1px solid #e85d04;
+        border: 1px solid #3CC8A0;
         border-radius: 12px;
-        color: #e85d04;
+        color: #3CC8A0;
         font-size: 1em;
         text-decoration: none;
         min-height: 48px;
         line-height: 1.4;
     }
     .library-btn:hover {
-        background: rgba(232, 93, 4, 0.1);
-        color: #e85d04;
+        background: rgba(60, 200, 160, 0.1);
+        color: #3CC8A0;
     }
 </style>
 {% endblock %}
