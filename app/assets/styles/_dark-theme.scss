@@ -1,0 +1,374 @@
+// ==========================================================================
+// Dark Theme — extracted from player.html, applied globally
+// Color palette matches the polished audio player page aesthetic.
+// ==========================================================================
+
+// --- Variables ---
+$bg-primary:      #1a1a2e;
+$bg-nav:          #0f0f23;
+$surface-bg:      #16213e;
+$surface-bg-light:#1e2a4a;
+$text-primary:    #e0e0e0;
+$text-secondary:  #8888aa;
+$border-color:    #333355;
+$accent:          #e85d04;
+$accent-hover:    #dc2f02;
+
+// --- Base ---
+body {
+  background: $bg-primary;
+  color: $text-primary;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $text-primary;
+}
+
+a {
+  color: $accent;
+
+  &:hover {
+    color: $accent-hover;
+  }
+}
+
+p {
+  color: $text-primary;
+}
+
+// --- Semantic UI Overrides ---
+
+// Segments (cards / panels)
+.ui.segment {
+  background: $surface-bg;
+  border-color: $border-color;
+  box-shadow: none;
+  color: $text-primary;
+}
+
+// Headers
+.ui.header {
+  color: $text-primary;
+
+  .sub.header {
+    color: $text-secondary;
+  }
+}
+
+// Dividing headers
+.ui.dividing.header {
+  border-bottom-color: $border-color;
+}
+
+// Hidden dividers — no visual change needed, just ensure no white line
+.ui.hidden.divider {
+  border-color: transparent;
+}
+
+// Buttons — default
+.ui.button {
+  background: $surface-bg;
+  color: $text-primary;
+  border: 1px solid $border-color;
+
+  &:hover {
+    background: $surface-bg-light;
+    color: $text-primary;
+  }
+
+  &:focus {
+    background: $surface-bg-light;
+    color: $text-primary;
+  }
+}
+
+// Colored buttons — keep their Semantic UI colors, ensure white text
+.ui.teal.button {
+  color: #fff !important;
+}
+
+.ui.green.button {
+  color: #fff !important;
+}
+
+.ui.primary.button {
+  background: $accent;
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background: $accent-hover;
+    color: #fff;
+  }
+}
+
+// Forms
+.ui.form {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  textarea,
+  select {
+    background: $surface-bg !important;
+    border: 1px solid $border-color !important;
+    color: $text-primary !important;
+
+    &::placeholder {
+      color: $text-secondary !important;
+    }
+
+    &:focus {
+      background: $surface-bg-light !important;
+      border-color: $accent !important;
+      color: $text-primary !important;
+    }
+  }
+
+  .field > label {
+    color: $text-primary;
+  }
+
+  .field.error input {
+    background: $surface-bg !important;
+    border-color: #e0b4b4 !important;
+    color: $text-primary !important;
+  }
+}
+
+// Pointing labels (form descriptions and validation errors)
+.ui.pointing.below.label {
+  background: $surface-bg;
+  color: $text-secondary;
+  border-color: $border-color;
+
+  &::before {
+    background: $surface-bg;
+    border-color: $border-color;
+  }
+}
+
+// Checkboxes
+.ui.checkbox label,
+.ui.checkbox + label {
+  color: $text-primary !important;
+}
+
+.ui.radio.checkbox label {
+  color: $text-primary !important;
+}
+
+// Navigation bar
+.ui.fixed.inverted.black.main.menu {
+  background: $bg-nav !important;
+  border-bottom: 1px solid $border-color;
+
+  .item {
+    color: $text-secondary;
+
+    &:hover {
+      color: $text-primary;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      color: $text-primary !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+}
+
+// Mobile slide-out vertical menu
+.ui.fixed.vertical.fluid.menu {
+  background: $bg-nav;
+  border-color: $border-color;
+
+  .item {
+    color: $text-secondary !important;
+    border-color: $border-color;
+
+    &:hover {
+      color: $text-primary !important;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      color: $text-primary !important;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+// Secondary menu (account settings sidebar)
+.ui.vertical.secondary.menu {
+  .item {
+    color: $text-secondary;
+
+    &:hover {
+      color: $text-primary;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      color: $text-primary;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+// Flash messages — base
+.ui.message {
+  background: $surface-bg;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  box-shadow: none;
+
+  .header {
+    color: $text-primary;
+  }
+
+  .close.icon {
+    color: $text-secondary;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  .list {
+    color: inherit;
+  }
+}
+
+// Typed flash messages — dark-friendly variants
+.ui.error.message {
+  background: rgba(219, 40, 40, 0.15);
+  border-color: #db2828;
+  color: #ff6b6b;
+
+  .header { color: #ff6b6b; }
+}
+
+.ui.warning.message {
+  background: rgba(255, 181, 46, 0.15);
+  border-color: #f2c037;
+  color: #f2c037;
+
+  .header { color: #f2c037; }
+}
+
+.ui.info.message {
+  background: rgba(49, 112, 143, 0.15);
+  border-color: #31708f;
+  color: #79c9ec;
+
+  .header { color: #79c9ec; }
+}
+
+.ui.success.message {
+  background: rgba(33, 186, 69, 0.15);
+  border-color: #21ba45;
+  color: #5cd67b;
+
+  .header { color: #5cd67b; }
+}
+
+// Tables
+.ui.table {
+  background: $surface-bg;
+  color: $text-primary;
+  border-color: $border-color;
+
+  th {
+    background: $bg-nav;
+    color: $text-primary !important;
+    border-color: $border-color;
+  }
+
+  td {
+    border-color: $border-color;
+    color: $text-primary;
+  }
+
+  tr:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+}
+
+.ui.definition.table tr td:first-child {
+  background: rgba(255, 255, 255, 0.03);
+  color: $text-secondary;
+}
+
+// Dividers
+.ui.divider {
+  border-color: $border-color;
+}
+
+// Grid divided rows
+.ui.divided.grid > .row > .column {
+  box-shadow: -1px 0 0 0 $border-color;
+}
+
+.ui.stackable.divided.grid > .row > .column:first-child {
+  box-shadow: none;
+}
+
+// Dropdowns
+.ui.dropdown .menu {
+  background: $surface-bg;
+  border-color: $border-color;
+
+  > .item {
+    color: $text-primary !important;
+    border-color: $border-color;
+
+    &:hover {
+      background: $surface-bg-light !important;
+    }
+  }
+}
+
+// Selection dropdowns (custom select fields)
+.ui.selection.dropdown {
+  background: $surface-bg;
+  border-color: $border-color;
+  color: $text-primary;
+
+  .default.text {
+    color: $text-secondary;
+  }
+
+  .menu > .item {
+    color: $text-primary;
+    border-color: $border-color;
+  }
+}
+
+// Containers — ensure text color inheritance
+.ui.container {
+  color: $text-primary;
+}
+
+// Masthead (book info page)
+.ui.masthead.container {
+  color: $text-primary;
+
+  p {
+    color: $text-secondary;
+  }
+}
+
+// Password strength meter text
+#password-strength-text {
+  color: $text-secondary;
+}
+
+// Inline editor (about page)
+[contenteditable] {
+  color: $text-primary;
+}

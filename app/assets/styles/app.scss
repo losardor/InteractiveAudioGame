@@ -1,3 +1,5 @@
+@import 'dark-theme';
+
 // Semantic UI breakpoints
 $mobile-breakpoint:        768px;
 $tablet-breakpoint:        992px;
@@ -8,9 +10,9 @@ nav {
     margin-bottom: 40px !important;
 }
 
-// Desktop nav
+// Desktop nav — adjust border for dark theme
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
-    border-right: 1px solid rgba(34, 36, 38, 0.0980392);
+    border-right: 1px solid $border-color;
 }
 
 // Mobile nav
