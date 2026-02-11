@@ -65,9 +65,8 @@ class BookLoader():
 class JsonFileBookLoader(BookLoader):
 
     def __init__(self,file):
-        # with open(file_name,"r") as json_file:
-        #     book_dict = jload(json_file)
-        book_dict = jload(file)
+        with open(file, "r") as json_file:
+            book_dict = jload(json_file)
         super().__init__(book_dict)
 
     
