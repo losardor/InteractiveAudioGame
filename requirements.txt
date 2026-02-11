@@ -28,10 +28,12 @@ rq==2.1.0
 # Asset pipeline
 webassets==2.0
 jsmin==3.0.1
+libsass==0.23.0
 
 # Forms
 WTForms==3.2.1
 wtforms-sqlalchemy==0.4.2
+email_validator==2.2.0
 
 # Server
 gunicorn==23.0.0
