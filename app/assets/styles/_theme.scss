@@ -1,0 +1,679 @@
+// ==========================================================================
+// Soundmaze Two-Mode Theme
+// Light mode (default) for browsing — Dark mode (scoped) for immersion
+// Colors from VISUAL_IDENTITY.md
+// ==========================================================================
+
+// --- Shared Palette ---
+$accent-orange:       #E8734A;
+$accent-orange-hover: #D4633A;
+$cta-teal:            #3CC8A0;
+$cta-teal-hover:      #33B08A;
+$progress-track:      #4A4A5A;
+
+// --- Light Mode ---
+$light-bg:             #F5F5F5;
+$light-surface:        #FFFFFF;
+$light-border:         #E0E0E0;
+$light-text:           #1C1C2E;
+$light-text-secondary: #6A6A6A;
+
+// --- Dark Mode ---
+$dark-bg:              #1C1C2E;
+$dark-surface:         #252540;
+$dark-border:          #333355;
+$dark-text:            #FFFFFF;
+$dark-text-secondary:  #8A8A8A;
+
+// --- Navigation (always dark) ---
+$nav-bg:               #0F0F23;
+
+// --- Typography ---
+$font-display: 'Playfair Display', Georgia, serif;
+$font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+
+// ==========================================================================
+// Section A — Base Styles (both modes)
+// ==========================================================================
+
+body {
+  font-family: $font-body;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-body;
+}
+
+// Buttons — teal CTA everywhere
+.ui.button {
+  background: $cta-teal;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+
+  &:hover {
+    background: $cta-teal-hover;
+    color: #fff;
+  }
+
+  &:focus {
+    background: $cta-teal-hover;
+    color: #fff;
+  }
+}
+
+.ui.teal.button {
+  background: $cta-teal !important;
+  color: #fff !important;
+
+  &:hover {
+    background: $cta-teal-hover !important;
+  }
+}
+
+.ui.green.button {
+  background: $cta-teal !important;
+  color: #fff !important;
+
+  &:hover {
+    background: $cta-teal-hover !important;
+  }
+}
+
+.ui.primary.button {
+  background: $cta-teal;
+  color: #fff;
+  border: none;
+
+  &:hover {
+    background: $cta-teal-hover;
+    color: #fff;
+  }
+}
+
+// Display title utility — serif treatment for book titles
+.display-title {
+  font-family: $font-display;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+
+// ==========================================================================
+// Section B — Light Mode (default)
+// ==========================================================================
+
+body {
+  background: $light-bg;
+  color: $light-text;
+}
+
+a {
+  color: $cta-teal;
+  text-decoration: none;
+
+  &:hover {
+    color: $cta-teal-hover;
+  }
+}
+
+.ui.header {
+  color: $light-text;
+
+  .sub.header {
+    color: $light-text-secondary;
+  }
+}
+
+.ui.dividing.header {
+  border-bottom-color: $light-border;
+}
+
+.ui.segment {
+  background: $light-surface;
+  border: 1px solid $light-border;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  color: $light-text;
+}
+
+.ui.hidden.divider {
+  border-color: transparent;
+}
+
+// Forms — light mode
+.ui.form {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  textarea,
+  select {
+    background: $light-surface !important;
+    border: 1px solid $light-border !important;
+    color: $light-text !important;
+
+    &::placeholder {
+      color: $light-text-secondary !important;
+    }
+
+    &:focus {
+      border-color: $cta-teal !important;
+      color: $light-text !important;
+    }
+  }
+
+  .field > label {
+    color: $light-text;
+  }
+
+  .field.error input {
+    background: $light-surface !important;
+    border-color: #E85D5D !important;
+    color: $light-text !important;
+  }
+}
+
+// Form pointing labels (descriptions)
+.ui.pointing.below.label {
+  background: $light-surface;
+  color: $light-text-secondary;
+  border-color: $light-border;
+
+  &::before {
+    background: $light-surface;
+    border-color: $light-border;
+  }
+}
+
+// Validation error labels
+.ui.red.pointing.label {
+  background: transparent !important;
+  color: #E85D5D !important;
+  border-color: #E85D5D !important;
+}
+
+// Checkboxes — light mode
+.ui.checkbox label,
+.ui.checkbox + label {
+  color: $light-text !important;
+}
+
+.ui.radio.checkbox label {
+  color: $light-text !important;
+}
+
+// Flash messages — light mode
+.ui.message {
+  background: $light-surface;
+  color: $light-text;
+  border: 1px solid $light-border;
+  box-shadow: none;
+
+  .header {
+    color: $light-text;
+  }
+
+  .close.icon {
+    color: $light-text-secondary;
+
+    &:hover {
+      color: $light-text;
+    }
+  }
+
+  .list {
+    color: inherit;
+  }
+}
+
+.ui.error.message {
+  background: $light-surface;
+  border-color: $light-border;
+  border-left: 3px solid #E85D5D;
+  color: $light-text;
+
+  .header { color: #E85D5D; }
+}
+
+.ui.warning.message {
+  background: $light-surface;
+  border-color: $light-border;
+  border-left: 3px solid #f2c037;
+  color: $light-text;
+
+  .header { color: #b58105; }
+}
+
+.ui.info.message {
+  background: $light-surface;
+  border-color: $light-border;
+  border-left: 3px solid $accent-orange;
+  color: $light-text;
+
+  .header { color: $accent-orange; }
+}
+
+.ui.success.message {
+  background: $light-surface;
+  border-color: $light-border;
+  border-left: 3px solid $cta-teal;
+  color: $light-text;
+
+  .header { color: $cta-teal; }
+}
+
+// Containers
+.ui.container {
+  color: inherit;
+}
+
+// Masthead (book info page) — light mode
+.ui.masthead.container {
+  p {
+    color: $light-text-secondary;
+  }
+}
+
+// Tables — light mode
+.ui.table {
+  background: $light-surface;
+  color: $light-text;
+  border-color: $light-border;
+
+  th {
+    background: $light-bg;
+    color: $light-text !important;
+    border-color: $light-border;
+  }
+
+  td {
+    border-color: $light-border;
+    color: $light-text;
+  }
+
+  tr:hover {
+    background: rgba(0, 0, 0, 0.02) !important;
+  }
+}
+
+.ui.definition.table tr td:first-child {
+  background: rgba(0, 0, 0, 0.02);
+  color: $light-text-secondary;
+}
+
+// Dividers — light mode
+.ui.divider {
+  border-color: $light-border;
+}
+
+// Grid divided rows — light mode
+.ui.divided.grid > .row > .column {
+  box-shadow: -1px 0 0 0 $light-border;
+}
+
+.ui.stackable.divided.grid > .row > .column:first-child {
+  box-shadow: none;
+}
+
+// Dropdowns — light mode
+.ui.dropdown .menu {
+  background: $light-surface;
+  border-color: $light-border;
+
+  > .item {
+    color: $light-text !important;
+    border-color: $light-border;
+
+    &:hover {
+      background: $light-bg !important;
+    }
+  }
+}
+
+.ui.selection.dropdown {
+  background: $light-surface;
+  border-color: $light-border;
+  color: $light-text;
+
+  .default.text {
+    color: $light-text-secondary;
+  }
+
+  .menu > .item {
+    color: $light-text;
+    border-color: $light-border;
+  }
+}
+
+// Secondary menu (account settings sidebar) — light mode
+.ui.vertical.secondary.menu {
+  .item {
+    color: $light-text-secondary;
+
+    &:hover {
+      color: $light-text;
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    &.active {
+      color: $light-text;
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+// Password strength meter text — light mode
+#password-strength-text {
+  color: $light-text-secondary;
+}
+
+// Inline editor (about page) — light mode
+[contenteditable] {
+  color: $light-text;
+}
+
+
+// ==========================================================================
+// Section C — Dark Mode (scoped under body.dark-mode)
+// ==========================================================================
+
+body.dark-mode {
+  background: $dark-bg;
+  color: $dark-text;
+
+  a {
+    color: $cta-teal;
+
+    &:hover {
+      color: $cta-teal-hover;
+    }
+  }
+
+  .ui.header {
+    color: $dark-text;
+
+    .sub.header {
+      color: $dark-text-secondary;
+    }
+  }
+
+  .ui.dividing.header {
+    border-bottom-color: $dark-border;
+  }
+
+  .ui.segment {
+    background: $dark-surface;
+    border-color: $dark-border;
+    box-shadow: none;
+    color: $dark-text;
+  }
+
+  // Forms — dark mode
+  .ui.form {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="url"],
+    input[type="search"],
+    input[type="tel"],
+    textarea,
+    select {
+      background: $dark-surface !important;
+      border: 1px solid $dark-border !important;
+      color: $dark-text !important;
+
+      &::placeholder {
+        color: $dark-text-secondary !important;
+      }
+
+      &:focus {
+        border-color: $cta-teal !important;
+        color: $dark-text !important;
+      }
+    }
+
+    .field > label {
+      color: $dark-text-secondary;
+    }
+
+    .field.error input {
+      background: $dark-surface !important;
+      border-color: #ff6b6b !important;
+      color: $dark-text !important;
+    }
+  }
+
+  .ui.pointing.below.label {
+    background: $dark-surface;
+    color: $dark-text-secondary;
+    border-color: $dark-border;
+
+    &::before {
+      background: $dark-surface;
+      border-color: $dark-border;
+    }
+  }
+
+  .ui.red.pointing.label {
+    background: transparent !important;
+    color: #ff6b6b !important;
+    border-color: #ff6b6b !important;
+  }
+
+  .ui.checkbox label,
+  .ui.checkbox + label {
+    color: $dark-text !important;
+  }
+
+  .ui.radio.checkbox label {
+    color: $dark-text !important;
+  }
+
+  // Flash messages — dark mode
+  .ui.message {
+    background: $dark-surface;
+    color: $dark-text;
+    border: 1px solid $dark-border;
+
+    .header {
+      color: $dark-text;
+    }
+
+    .close.icon {
+      color: $dark-text-secondary;
+
+      &:hover {
+        color: $dark-text;
+      }
+    }
+  }
+
+  .ui.error.message {
+    background: $dark-surface;
+    border-color: $dark-border;
+    border-left: 3px solid #ff6b6b;
+    color: $dark-text;
+
+    .header { color: #ff6b6b; }
+  }
+
+  .ui.warning.message {
+    background: $dark-surface;
+    border-color: $dark-border;
+    border-left: 3px solid #f2c037;
+    color: $dark-text;
+
+    .header { color: #f2c037; }
+  }
+
+  .ui.info.message {
+    background: $dark-surface;
+    border-color: $dark-border;
+    border-left: 3px solid $accent-orange;
+    color: $dark-text;
+
+    .header { color: $accent-orange; }
+  }
+
+  .ui.success.message {
+    background: $dark-surface;
+    border-color: $dark-border;
+    border-left: 3px solid $cta-teal;
+    color: $dark-text;
+
+    .header { color: $cta-teal; }
+  }
+
+  // Tables — dark mode
+  .ui.table {
+    background: $dark-surface;
+    color: $dark-text;
+    border-color: $dark-border;
+
+    th {
+      background: $nav-bg;
+      color: $dark-text !important;
+      border-color: $dark-border;
+    }
+
+    td {
+      border-color: $dark-border;
+      color: $dark-text;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.03) !important;
+    }
+  }
+
+  .ui.definition.table tr td:first-child {
+    background: rgba(255, 255, 255, 0.03);
+    color: $dark-text-secondary;
+  }
+
+  // Dividers — dark mode
+  .ui.divider {
+    border-color: $dark-border;
+  }
+
+  .ui.divided.grid > .row > .column {
+    box-shadow: -1px 0 0 0 $dark-border;
+  }
+
+  // Dropdowns — dark mode
+  .ui.dropdown .menu {
+    background: $dark-surface;
+    border-color: $dark-border;
+
+    > .item {
+      color: $dark-text !important;
+      border-color: $dark-border;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+      }
+    }
+  }
+
+  .ui.selection.dropdown {
+    background: $dark-surface;
+    border-color: $dark-border;
+    color: $dark-text;
+
+    .default.text {
+      color: $dark-text-secondary;
+    }
+  }
+
+  // Secondary menu — dark mode
+  .ui.vertical.secondary.menu {
+    .item {
+      color: $dark-text-secondary;
+
+      &:hover {
+        color: $dark-text;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      &.active {
+        color: $dark-text;
+        background: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+
+  .ui.masthead.container p {
+    color: $dark-text-secondary;
+  }
+
+  #password-strength-text {
+    color: $dark-text-secondary;
+  }
+
+  [contenteditable] {
+    color: $dark-text;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: $dark-text;
+  }
+
+  p {
+    color: $dark-text;
+  }
+}
+
+
+// ==========================================================================
+// Section D — Navigation Bar (always dark, regardless of page mode)
+// ==========================================================================
+
+.ui.fixed.inverted.black.main.menu {
+  background: $nav-bg !important;
+  border-bottom: 1px solid $dark-border;
+
+  .item {
+    color: $dark-text-secondary;
+    font-family: $font-body;
+
+    &:hover {
+      color: $dark-text;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      color: $dark-text !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+}
+
+// Mobile slide-out vertical menu (also always dark)
+.ui.fixed.vertical.fluid.menu {
+  background: $nav-bg;
+  border-color: $dark-border;
+
+  .item {
+    color: $dark-text-secondary !important;
+    border-color: $dark-border;
+
+    &:hover {
+      color: $dark-text !important;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      color: $dark-text !important;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
