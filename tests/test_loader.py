@@ -63,6 +63,29 @@ BRANCHING_BOOK = {
     ]
 }
 
+BOOK_WITH_AUDIO = {
+    "name": "Audio Book",
+    "description": "A book with audio on one waypoint",
+    "waypoints": [
+        {
+            "id": 1,
+            "start": True,
+            "content": {"type": "text", "data": "Listen here", "audio": "intro.mp3"},
+            "options": [
+                {"destinationWaypoint_id": 2, "linkText": "Next"}
+            ]
+        },
+        {
+            "id": 2,
+            "start": False,
+            "content": {"type": "text", "data": "No audio here"},
+            "options": [
+                {"destinationWaypoint_id": 1, "linkText": "Back"}
+            ]
+        }
+    ]
+}
+
 NON_TEXT_CONTENT_BOOK = {
     "name": "Non-text Book",
     "description": "A book with non-text content type",
@@ -181,3 +204,25 @@ class BookLoaderTestCase(unittest.TestCase):
         for tc in TextContent.query.all():
             self.assertIsNone(tc.audio_url)
             self.assertIsNone(tc.audio_duration)
+
+    def test_audio_url_set_when_audio_in_json(self):
+        loader = BookLoader(BOOK_WITH_AUDIO)
+        loader.load()
+        book = Book.query.filter_by(name='Audio Book').first()
+        contents = TextContent.query.all()
+        audio_content = [c for c in contents if c.audio_url is not None]
+        no_audio_content = [c for c in contents if c.audio_url is None]
+        self.assertEqual(len(audio_content), 1)
+        self.assertEqual(len(no_audio_content), 1)
+        self.assertEqual(
+            audio_content[0].audio_url,
+            '/static/audio/{}/intro.mp3'.format(book.id))
+        self.assertEqual(audio_content[0].content, 'Listen here')
+
+    def test_audio_url_includes_book_id(self):
+        loader = BookLoader(BOOK_WITH_AUDIO)
+        loader.load()
+        book = Book.query.filter_by(name='Audio Book').first()
+        tc = TextContent.query.filter(TextContent.audio_url.isnot(None)).first()
+        self.assertTrue(tc.audio_url.startswith(
+            '/static/audio/{}/'.format(book.id)))

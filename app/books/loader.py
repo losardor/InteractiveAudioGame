@@ -56,6 +56,10 @@ class BookLoader():
              else:
                 cnt = TextContent(content=None,
                 waypoint_id =self.wp_mapping[wp["id"]])
+             audio_filename = wp["content"].get("audio")
+             if audio_filename:
+                cnt.audio_url = '/static/audio/{}/{}'.format(
+                    self.book.id, audio_filename)
              db.session.add(cnt)
              db.session.flush()
 

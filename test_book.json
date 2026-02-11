@@ -5,13 +5,13 @@
     "waypoints":[{
         "id":1,
         "start":true,
-        "content": {"type":"text","data":"wp di partenza"},
+        "content": {"type":"text","data":"wp di partenza","audio":"intro.mp3"},
         "options":[{
             "destinationWaypoint_id": 2,
             "linkText": "Vai al 2"
         }]
     },
-    { 
+    {
             "id":2,
             "start":false,
             "content": {"type":"text","data":"wp numero 2"},

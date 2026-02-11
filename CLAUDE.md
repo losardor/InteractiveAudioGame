@@ -83,7 +83,7 @@ docker/
     "waypoints": [{
         "id": 1,
         "start": true,
-        "content": {"type": "text", "data": "Story text here"},
+        "content": {"type": "text", "data": "Story text here", "audio": "chapter1.mp3"},
         "options": [{
             "destinationWaypoint_id": 2,
             "linkText": "Go to chapter 2"
@@ -92,7 +92,9 @@ docker/
 }
 ```
 
-Content type `"text"` is the only implemented type. Future types: `"audio"`, `"tts"`.
+Content type `"text"` is the only implemented type. Future types: `"tts"`.
+
+The `"audio"` field in content is **optional**. When present, the loader sets `audio_url` to `/static/audio/<book_id>/<filename>`. The actual audio file must be placed at that path manually or via upload.
 
 ## Running Locally
 
