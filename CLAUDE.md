@@ -14,12 +14,13 @@ This is a **Flask backend** built on the hack4impact flask-base boilerplate (201
 
 ## Tech Stack
 
-- Python 3.7 (migrating to 3.12), Flask, SQLAlchemy, Jinja2 templates
+- Python 3.12, Flask 3.1, SQLAlchemy 2.0, Jinja2 3.1
 - PostgreSQL (Docker) or SQLite (local dev fallback)
-- Redis + RQ for background jobs
+- Redis 5.2 + RQ 2.1 for background jobs (direct usage, no Flask-RQ wrapper)
 - Docker Compose for local dev (Flask + Postgres + Redis + Adminer + Maildev + Worker)
 - Semantic UI for frontend CSS (will be replaced)
-- Flask-Migrate / Alembic for DB migrations
+- Flask-Migrate 4.1 / Alembic for DB migrations
+- WTForms 3.2 + wtforms-sqlalchemy for forms
 
 ## Domain Model
 
@@ -124,7 +125,7 @@ flask run-worker         # Start RQ background worker
 
 ### Test Environment
 
-**Docker is the canonical test environment.** There is no local virtual environment set up, and the 2019-era pinned dependencies may not install on the host machine's Python (3.10). All tests must be run inside the Docker container until the dependency modernization (Roadmap Step 1) is complete.
+**Docker is the canonical test environment.** Dependencies are now modern (Flask 3.1, Python 3.12) and should install on the host machine's Python 3.10+, but no local virtual environment has been set up yet. Docker remains the primary way to run and test.
 
 ### Running Tests
 
@@ -174,13 +175,23 @@ Currently **broken** — still references `python manage.py test` (pre-Flask-CLI
 
 ## Known Technical Debt (being addressed)
 
-Active modernization is tracked in the project instructions file. Key issues:
-- Dependencies pinned to 2019 versions — upgrading incrementally
-- `itsdangerous.TimedJSONWebSignatureSerializer` removed in itsdangerous 2.1+
-- `werkzeug.contrib.fixers` removed in Werkzeug 1.0+
-- `raygun4py` hard dependency in config.py
-- `SQLALCHEMY_COMMIT_ON_TEARDOWN` deprecated
-- `Flask-RQ` abandoned, `Flask-SSLify` deprecated
+Active modernization is tracked in the project instructions file (`SOUNDMAZE_PROJECT.md`). 
+
+**Resolved (Commits 1–3 on modernize/flask-cli branch):**
+- ~~Dependencies pinned to 2019 versions~~ → All updated to current stable
+- ~~`flask_script`~~ → Flask CLI
+- ~~`itsdangerous.TimedJSONWebSignatureSerializer`~~ → `URLSafeTimedSerializer`
+- ~~`werkzeug.contrib.fixers`~~ → `werkzeug.middleware.proxy_fix`
+- ~~`raygun4py` hard dependency~~ → Removed
+- ~~`SQLALCHEMY_COMMIT_ON_TEARDOWN`~~ → Removed
+- ~~`Flask-RQ` abandoned~~ → Replaced with `get_queue()` helper using `rq` directly
+- ~~`Flask-SSLify` deprecated~~ → Removed
+- ~~Python 3.7 in Docker~~ → Python 3.12
+
+**Remaining:**
+- GitHub Actions CI still broken (references old `python manage.py test`)
+- No local virtual environment set up
+- Docker compose `version: "3.7"` key deprecated, maildev image outdated
 - No API layer — everything is server-rendered Jinja templates
 - No audio content, session tracking, or mobile-optimized UI yet
 
