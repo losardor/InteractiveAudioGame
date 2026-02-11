@@ -4,25 +4,25 @@ services:
         ports:
           - "6379:6379"
     flask:
-      build: 
+      build:
         context: ../
         dockerfile: ./docker/Dockerfile
       ports:
         - "5000:5000"
       volumes:
         - ..:/code
-      environment: 
+      environment:
         - SECRET_KEY=387c18ea9f3dd4bf7636ba7fcd8a444d
         - REDISTOGO_URL=http://redis:6379
-        - FLASK_CONFIG=development 
+        - FLASK_CONFIG=development
         - DATABASE_URL=postgresql://puser:p_pwd@db:5432/production
         - DEV_DATABASE_URL=postgresql://puser:p_pwd@db:5432/dev
         - MAIL_SERVER=mail_server
         - MAIL_PORT=25
         - MAIL_USERNAME=noreply@interactiveaudiobooks.com
         - FLASK_APP=manage
-      entrypoint: ["flask", "run", "--host=0.0.0.0", "--port=5000"]
-      depends_on: 
+      command: ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+      depends_on:
         - redis
         - db
     db:
@@ -42,40 +42,32 @@ services:
         - 8080:8080
 
     worker:
-      build: 
+      build:
         context: ../
         dockerfile: ./docker/Dockerfile
-
       volumes:
         - ..:/code
-      environment: 
+      environment:
         - SECRET_KEY=387c18ea9f3dd4bf7636ba7fcd8a444d
         - REDISTOGO_URL=http://redis:6379
-        - FLASK_CONFIG=development 
+        - FLASK_CONFIG=development
         - DATABASE_URL=postgresql://puser:p_pwd@db:5432/production
         - DEV_DATABASE_URL=postgresql://puser:p_pwd@db:5432/dev
         - MAIL_SERVER=mail_server
         - MAIL_PORT=25
         - MAIL_USERNAME=noreply@interactiveaudiobooks.com
         - FLASK_APP=manage
-
-      entrypoint: ["flask", "run-worker"]
-
-      depends_on: 
+      command: ["flask", "run-worker"]
+      depends_on:
         - redis
         - db
 
     mail_server:
       image: maildev/maildev
-      ports: 
+      ports:
         - 8081:80
         - 25
-   
-   
 
 volumes:
   pgdata_dev:
     driver: local
-
-              
-  

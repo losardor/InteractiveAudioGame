@@ -117,5 +117,49 @@ def load_json_book(file):
     JsonFileBookLoader(file).load()
 
 
+@app.cli.command('setup-demo')
+def setup_demo():
+    """Drop/recreate DB, seed roles + admin, load the demo book with audio."""
+    import json
+    from app.books.loader import BookLoader
+    from app.models.content import TextContent
+
+    # 1. Recreate database
+    db.drop_all()
+    db.create_all()
+    db.session.commit()
+    print('Database recreated.')
+
+    # 2. Seed roles + admin user
+    setup_general()
+    print('Roles and admin user created.')
+
+    # 3. Load the Enchanted Forest demo book
+    book_path = os.path.join(os.path.dirname(__file__), 'enchanted_forest.json')
+    with open(book_path, 'r') as f:
+        book_dict = json.load(f)
+    loader = BookLoader(book_dict)
+    loader.load()
+    book = loader.book
+    print(f'Loaded book: {book.name}')
+
+    # 4. Rewrite audio_urls to use the demo/ directory
+    #    (The loader sets /static/audio/<book_id>/<file>, but the bundled
+    #    files live under /static/audio/demo/<file>.)
+    contents = TextContent.query.filter(
+        TextContent.audio_url.isnot(None)).all()
+    for c in contents:
+        filename = c.audio_url.rsplit('/', 1)[-1]
+        c.audio_url = f'/static/audio/demo/{filename}'
+    db.session.commit()
+
+    # 5. Summary
+    from app.models import Book
+    from app.models.waypoint import Waypoint
+    wp_count = Waypoint.query.filter_by(book_id=book.id).count()
+    audio_count = len(contents)
+    print(f'Demo ready: 1 book, {wp_count} waypoints, {audio_count} audio files')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
