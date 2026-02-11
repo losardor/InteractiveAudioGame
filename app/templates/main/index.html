@@ -1,17 +1,145 @@
 {% extends 'layouts/base.html' %}
 
+{% block page_title %}Soundmaze — Choose your own path{% endblock %}
+
+{% block custom_head_tags %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 80px 16px 48px;
+    }
+    .hero-brand {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 900;
+        font-size: 3em;
+        color: #1C1C2E;
+        margin-bottom: 8px;
+    }
+    .hero-tagline {
+        font-size: 1.2em;
+        color: #6A6A6A;
+        margin-bottom: 32px;
+    }
+    .hero-cta {
+        display: inline-block;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 1.05em;
+        font-weight: 500;
+        text-decoration: none;
+        min-height: 48px;
+        line-height: 1.4;
+        margin: 0 6px 12px;
+    }
+    .hero-cta-primary {
+        background: #3CC8A0;
+        color: #FFFFFF;
+    }
+    .hero-cta-primary:hover {
+        background: #33B08A;
+        color: #FFFFFF;
+    }
+    .hero-cta-secondary {
+        border: 1px solid #3CC8A0;
+        color: #3CC8A0;
+        background: none;
+    }
+    .hero-cta-secondary:hover {
+        background: rgba(60, 200, 160, 0.1);
+        color: #3CC8A0;
+    }
+    .hero-welcome {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        font-size: 2em;
+        color: #1C1C2E;
+        margin-bottom: 8px;
+    }
+    .featured-section {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 0 16px 64px;
+    }
+    .featured-label {
+        font-size: 0.8em;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #8A8A8A;
+        margin-bottom: 12px;
+    }
+    .featured-card {
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        border-radius: 12px;
+        padding: 24px;
+    }
+    .featured-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        font-size: 1.4em;
+        color: #1C1C2E;
+        margin-bottom: 4px;
+    }
+    .featured-author {
+        color: #6A6A6A;
+        font-size: 0.95em;
+        margin-bottom: 12px;
+    }
+    .featured-description {
+        color: #1C1C2E;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .featured-listen {
+        display: inline-block;
+        padding: 12px 28px;
+        background: #3CC8A0;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-size: 1em;
+        font-weight: 500;
+        text-decoration: none;
+        min-height: 48px;
+        line-height: 1.4;
+    }
+    .featured-listen:hover {
+        background: #33B08A;
+        color: #FFFFFF;
+    }
+    .featured-listen i.icon {
+        margin-right: 6px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="ui text container">
-      <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }} {% endif %},</h1>
-        <p>Welcome to SoundMaze. Soon you will be able to stop lookng at the screen and immerse yourself in a rich universe made of stories</p>
+<div class="hero">
+    {% if current_user.is_authenticated %}
+    <h1 class="hero-welcome">Welcome back, {{ current_user.first_name }}</h1>
+    <p class="hero-tagline">Ready to continue your adventure?</p>
+    <a href="{{ url_for('books.index') }}" class="hero-cta hero-cta-primary">Browse library</a>
+    {% else %}
+    <h1 class="hero-brand">Soundmaze</h1>
+    <p class="hero-tagline">Interactive audiobooks where you choose the path</p>
+    <a href="{{ url_for('account.register') }}" class="hero-cta hero-cta-primary">Get started</a>
+    <a href="{{ url_for('account.login') }}" class="hero-cta hero-cta-secondary">Log in</a>
+    {% endif %}
+</div>
 
-        <p>This is <a href="http://hack4impact.org">Hack4Impact</a>'s web application template. We'll use this as a
-        foundation for each of our <a href="http://flask.pocoo.org">Flask</a> projects. The goal is to reduce the work
-        necessary to get a new project off the ground, by providing boilerplate code (such as account management
-        facilities), as well as uncontroversial and extensible defaults. We have integrated an
-        <a href="http://sass-lang.com">SCSS</a>-based asset pipeline based around a (fantastic!) framework
-        called <a href="http://semantic-ui.com">Semantic UI</a>. Much of this code is appropriated from the examples
-        in Miguel Grinberg's book, <a href="http://flaskbook.com"><em>Flask Web Development</em></a>.</p>
-
+{% if featured_book %}
+<div class="featured-section">
+    <div class="featured-label">Featured story</div>
+    <div class="featured-card">
+        <div class="featured-title">{{ featured_book.name }}</div>
+        <div class="featured-author">by {{ featured_book.owner.full_name() }}</div>
+        <div class="featured-description">{{ featured_book.description }}</div>
+        {% if featured_start_wp %}
+        <a href="{{ url_for('books.play_waypoint', book_id=featured_book.id, waypoint_id=featured_start_wp.id) }}" class="featured-listen">
+            <i class="play icon"></i> Listen now
+        </a>
+        {% endif %}
     </div>
+</div>
+{% endif %}
 {% endblock %}

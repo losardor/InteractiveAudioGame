@@ -1,13 +1,22 @@
 from flask import Blueprint, render_template
 
-from app.models import EditableHTML
+from app.models import Book, EditableHTML, Waypoint
 
 main = Blueprint('main', __name__)
 
 
 @main.route('/')
 def index():
-    return render_template('main/index.html')
+    featured_book = Book.query.first()
+    featured_start_wp = None
+    if featured_book:
+        featured_start_wp = Waypoint.query.filter_by(
+            book_id=featured_book.id, start=True).first()
+    return render_template(
+        'main/index.html',
+        featured_book=featured_book,
+        featured_start_wp=featured_start_wp,
+    )
 
 
 @main.route('/about')
