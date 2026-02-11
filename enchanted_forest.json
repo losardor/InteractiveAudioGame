@@ -1,0 +1,122 @@
+{
+    "name": "The Enchanted Forest",
+    "description": "A short branching adventure through a mysterious forest. Multiple paths lead to different endings.",
+    "waypoints": [
+        {
+            "id": 1,
+            "start": true,
+            "content": {
+                "type": "text",
+                "data": "You stand at the entrance of an ancient forest. The trees tower above you, their canopy filtering the sunlight into dancing patterns on the moss-covered ground. A worn signpost stands before you, pointing in two directions. To the left, the path plunges into shadow beneath thick, gnarled oaks. To the right, sunlight streams through silver birches onto a meadow of wildflowers.",
+                "audio": "wp1-forest-entrance.mp3"
+            },
+            "options": [
+                {
+                    "destinationWaypoint_id": 2,
+                    "linkText": "Take the dark path into the ancient oaks"
+                },
+                {
+                    "destinationWaypoint_id": 3,
+                    "linkText": "Follow the sunlit path toward the meadow"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "The dark path winds deeper into the forest. The air grows cool and damp. Strange mushrooms glow faintly along the roots of the ancient trees. After a while, you hear two sounds: the low echo of dripping water from somewhere underground, and the distant rush of a river ahead.",
+                "audio": "wp2-dark-path.mp3"
+            },
+            "options": [
+                {
+                    "destinationWaypoint_id": 4,
+                    "linkText": "Follow the dripping sound into the cave"
+                },
+                {
+                    "destinationWaypoint_id": 5,
+                    "linkText": "Head toward the sound of the river"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "The bright path opens into a meadow bursting with colour. Butterflies drift between the wildflowers, and the warm sun feels wonderful on your face. Across the meadow you can see two things: a winding river with stepping stones, and a tall stone tower rising above the treeline.",
+                "audio": "wp3-sunny-meadow.mp3"
+            },
+            "options": [
+                {
+                    "destinationWaypoint_id": 5,
+                    "linkText": "Walk down to the river crossing"
+                },
+                {
+                    "destinationWaypoint_id": 6,
+                    "linkText": "Climb the stone tower"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "You squeeze through a narrow opening in the rock and find yourself in a vast underground cavern. Crystals embedded in the walls catch the light of the glowing mushrooms, filling the space with an ethereal blue glow. In the centre of the cavern, on a natural stone pedestal, sits an ornate wooden chest. You open it carefully. Inside, you find a beautifully crafted compass made of silver and starlight. It always points toward home. You have found the Forest's Gift. THE END.",
+                "audio": "wp4-cave.mp3"
+            },
+            "options": []
+        },
+        {
+            "id": 5,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "You arrive at a wide river. The water runs clear and swift over smooth stones. A rope bridge stretches across to the far bank, swaying gently in the breeze. It looks sturdy enough, but downstream you notice a calmer section where you could swim across. The far bank is lined with willow trees, and you can see smoke rising from somewhere beyond them.",
+                "audio": "wp5-river-crossing.mp3"
+            },
+            "options": [
+                {
+                    "destinationWaypoint_id": 7,
+                    "linkText": "Cross the rope bridge carefully"
+                },
+                {
+                    "destinationWaypoint_id": 8,
+                    "linkText": "Swim across at the calm section"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "You climb the winding stairs of the stone tower. Each floor reveals arrow-slit windows offering wider views. At the top, you step onto the open platform and gasp. The entire enchanted forest stretches out before you in every direction — the dark oaks, the shining river, the distant mountains. You can see the village beyond the river, a cave entrance glimmering with blue light, and far to the north, the sea. You understand now: the forest is alive, and it welcomed you. You will never be lost again. THE END.",
+                "audio": "wp6-tower.mp3"
+            },
+            "options": []
+        },
+        {
+            "id": 7,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "The rope bridge holds firm, and you cross to the far bank. Following the smell of wood smoke, you walk through the willow trees and discover a small village of cosy cottages. The villagers welcome you warmly. They are the Keepers of the Forest, and they have been expecting you. Over a meal of fresh bread and honey, they share stories of the forest's magic and invite you to stay as long as you wish. You have found a new home. THE END.",
+                "audio": "wp7-village.mp3"
+            },
+            "options": []
+        },
+        {
+            "id": 8,
+            "start": false,
+            "content": {
+                "type": "text",
+                "data": "You wade into the calm section of the river. The water is refreshingly cool. As you swim across, the current carries you gently downstream. You round a bend and discover something breathtaking: a hidden waterfall cascading into a crystal pool, surrounded by ferns and flowering vines. Behind the waterfall, there is a grotto filled with the sound of singing — the river itself seems to have a voice. You sit by the pool and listen. The song fills you with peace, and you know you have found something rare and precious. THE END.",
+                "audio": "wp8-waterfall.mp3"
+            },
+            "options": []
+        }
+    ]
+}

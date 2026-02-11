@@ -2,7 +2,7 @@
 {% import 'books/book_info.html' as b%}
 
 {% block content%}
-{{ b.book_info(book) }}
+{{ b.book_info(book, start_waypoint) }}
 <div class="ui hidden divider"></div>
 {% if waypoint %}
 <div class="main ui intro container">

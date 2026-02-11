@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Blueprint, render_template, flash, abort, redirect, url_for, request, current_app
@@ -118,7 +119,8 @@ def uploadnew():
     form = UploadBookForm()
     if form.validate_on_submit():
         f = form.file.data
-        l = loader.JsonFileBookLoader(f)
+        book_dict = json.load(f)
+        l = loader.BookLoader(book_dict)
         l.load()
         flash('Book {} successfully created'.format(l.book.name), 'form-success')
     return render_template('books/upload_book.html', form=form)
