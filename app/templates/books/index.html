@@ -11,22 +11,27 @@
 
             <div class="ui two column stackable grid">
                 {% for book in books %}
-                    <a class="column" href="{{ url_for('books.book_info', book_id=book.id) }}">
+                    <div class="column">
                         <div class="ui padded segment">
-                            <h3 class="ui header">
-                                <div class="content">
-                                    {{ book.name }}
-                                    <div class="sub header italic">
-                                        {{ book.owner.full_name() }}
+                            <a href="{{ url_for('books.book_info', book_id=book.id) }}">
+                                <h3 class="ui header">
+                                    <div class="content">
+                                        {{ book.name }}
+                                        <div class="sub header italic">
+                                            {{ book.owner.full_name() }}
+                                        </div>
                                     </div>
-                                </div>
-                            </h3>
+                                </h3>
+                            </a>
                             <div class="content">
                                 {{ book.description }}
                             </div>
-
+                            <div class="ui hidden divider"></div>
+                            {% if start_wps and book.id in start_wps %}
+                            <a href="{{ url_for('books.play_waypoint', book_id=book.id, waypoint_id=start_wps[book.id].id) }}" class="ui teal button"><i class="play icon"></i> Listen</a>
+                            {% endif %}
                         </div>
-                    </a>
+                    </div>
                 {% endfor %}
 
             </div>

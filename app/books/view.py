@@ -19,7 +19,9 @@ books = Blueprint('books', __name__)
 @login_required
 def index():
     thebooks = Book.query.all()
-    return render_template('books/index.html', books=thebooks)
+    start_wps = {wp.book_id: wp for wp in
+                 Waypoint.query.filter_by(start=True).all()}
+    return render_template('books/index.html', books=thebooks, start_wps=start_wps)
 
 
 @books.route('/book/<int:book_id>')
