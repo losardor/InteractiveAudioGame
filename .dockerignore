@@ -1,0 +1,11 @@
+.git
+__pycache__
+*.pyc
+.env
+docker/
+!docker/entrypoint.sh
+*.md
+.gitignore
+venv/
+.venv/
+tests/
