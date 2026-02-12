@@ -91,7 +91,9 @@
         transform: translateY(0);
         pointer-events: auto;
     }
-    .choice-btn {
+    body.dark-mode a.choice-btn,
+    body.dark-mode a.choice-btn:link,
+    body.dark-mode a.choice-btn:visited {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -111,14 +113,15 @@
         line-height: 1.4;
         transition: transform 0.15s, box-shadow 0.15s;
     }
-    .choice-btn:hover {
+    body.dark-mode a.choice-btn:hover {
         transform: scale(1.02);
         background: #33B08A;
         box-shadow: 0 4px 20px rgba(60, 200, 160, 0.3);
         color: #fff;
     }
-    .choice-btn:active {
+    body.dark-mode a.choice-btn:active {
         transform: scale(0.98);
+        color: #fff;
     }
     .skip-btn {
         display: block;
