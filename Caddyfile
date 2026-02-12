@@ -1,0 +1,8 @@
+# Replace with your actual domain
+# For initial testing without a domain, use:
+#   :80 {
+#       reverse_proxy flask:8000
+#   }
+app.soundmaze.com {
+    reverse_proxy flask:8000
+}
