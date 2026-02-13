@@ -94,15 +94,15 @@ class ProductionConfig(Config):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
 
 class HerokuConfig(ProductionConfig):
     @classmethod
     def init_app(cls, app):
         ProductionConfig.init_app(app)
-
-        # Handle proxy server headers
-        from werkzeug.middleware.proxy_fix import ProxyFix
-        app.wsgi_app = ProxyFix(app.wsgi_app)
+        # ProxyFix is now applied in ProductionConfig.init_app()
 
 
 class UnixConfig(ProductionConfig):
