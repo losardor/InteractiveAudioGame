@@ -44,6 +44,8 @@ class Config:
     AUDIO_UPLOAD_DIR = os.path.join(basedir, 'app', 'static', 'audio')
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB upload limit
 
+    MAIL_ENABLED = True
+
     REDIS_URL = os.getenv('REDISTOGO_URL', 'http://localhost:6379')
 
     # Parse the REDIS_URL to set RQ config variables
@@ -89,6 +91,9 @@ class ProductionConfig(Config):
     USE_RELOADER = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
         'sqlite:///' + os.path.join(basedir, 'data.sqlite'))
+
+    MAIL_ENABLED = bool(os.environ.get('MAIL_USERNAME'))
+
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)

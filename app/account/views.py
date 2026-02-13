@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    current_app,
     flash,
     redirect,
     render_template,
@@ -58,6 +59,11 @@ def register():
             password=form.password.data)
         db.session.add(user)
         db.session.commit()
+        if not current_app.config.get('MAIL_ENABLED', True):
+            user.confirmed = True
+            db.session.commit()
+            flash('Registration complete. You can now log in.', 'success')
+            return redirect(url_for('account.login'))
         token = user.generate_confirmation_token()
         confirm_link = url_for('account.confirm', token=token, _external=True)
         get_queue().enqueue(

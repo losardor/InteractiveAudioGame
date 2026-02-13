@@ -14,8 +14,30 @@ if url:
     sleep 1
 done
 
-# Check if database is already initialized (books table has rows)
-NEEDS_SETUP=$(python -c "
+# Check if the database tables exist at all
+TABLES_EXIST=$(python -c "
+import os, sqlalchemy
+url = os.environ.get('DEV_DATABASE_URL') or os.environ.get('DATABASE_URL', '')
+engine = sqlalchemy.create_engine(url)
+try:
+    with engine.connect() as conn:
+        conn.execute(sqlalchemy.text('SELECT 1 FROM roles LIMIT 1'))
+        print('yes')
+except Exception:
+    print('no')
+" 2>/dev/null || echo "no")
+
+if [ "$TABLES_EXIST" = "no" ]; then
+    echo "First run detected — running setup-demo (creates DB, roles, admin, demo book)..."
+    flask setup-demo
+    echo "Setup complete."
+else
+    # Tables exist — ensure roles and admin user are present (idempotent)
+    echo "Database tables exist. Ensuring roles and admin user..."
+    flask setup-prod
+
+    # Load demo book only if books table is empty
+    NEEDS_DEMO=$(python -c "
 import os, sqlalchemy
 url = os.environ.get('DEV_DATABASE_URL') or os.environ.get('DATABASE_URL', '')
 engine = sqlalchemy.create_engine(url)
@@ -25,15 +47,15 @@ try:
         count = result.scalar()
         print('no' if count > 0 else 'yes')
 except Exception:
-    print('yes')
-" 2>/dev/null || echo "yes")
+    print('no')
+" 2>/dev/null || echo "no")
 
-if [ "$NEEDS_SETUP" = "yes" ]; then
-    echo "First run detected — running setup-demo..."
-    flask setup-demo
-    echo "Setup complete."
-else
-    echo "Database already initialized, skipping setup."
+    if [ "$NEEDS_DEMO" = "yes" ]; then
+        echo "Books table is empty — loading demo book..."
+        flask load-json-book enchanted_forest.json
+    else
+        echo "Books already loaded, skipping demo content."
+    fi
 fi
 
 # Hand off to the CMD (flask run, gunicorn, etc.)
