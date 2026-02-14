@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    current_app,
     flash,
     redirect,
     render_template,
@@ -58,18 +59,25 @@ def register():
             password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        token = user.generate_confirmation_token()
-        confirm_link = url_for('account.confirm', token=token, _external=True)
-        get_queue().enqueue(
-            send_email,
-            recipient=user.email,
-            subject='Confirm Your Account',
-            template='account/email/confirm',
-            user=user,
-            confirm_link=confirm_link)
-        flash('A confirmation link has been sent to {}.'.format(user.email),
-              'warning')
-        return redirect(url_for('main.index'))
+        if current_app.config['MAIL_ENABLED']:
+            token = user.generate_confirmation_token()
+            confirm_link = url_for(
+                'account.confirm', token=token, _external=True)
+            get_queue().enqueue(
+                send_email,
+                recipient=user.email,
+                subject='Confirm Your Account',
+                template='account/email/confirm',
+                user=user,
+                confirm_link=confirm_link)
+            flash('A confirmation link has been sent to {}.'.format(
+                user.email), 'warning')
+            return redirect(url_for('main.index'))
+        else:
+            user.confirmed = True
+            db.session.commit()
+            flash('Registration complete. You may now log in.', 'success')
+            return redirect(url_for('account.login'))
     return render_template('account/register.html', form=form)
 
 
@@ -94,6 +102,10 @@ def reset_password_request():
     """Respond to existing user's request to reset their password."""
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
+    if not current_app.config['MAIL_ENABLED']:
+        flash('Password reset is not available — email is not configured.',
+              'error')
+        return redirect(url_for('account.login'))
     form = RequestResetPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -196,6 +208,10 @@ def change_email(token):
 @login_required
 def confirm_request():
     """Respond to new user's request to confirm their account."""
+    if not current_app.config['MAIL_ENABLED']:
+        flash('Email is not configured. Please contact an administrator.',
+              'error')
+        return redirect(url_for('main.index'))
     token = current_user.generate_confirmation_token()
     confirm_link = url_for('account.confirm', token=token, _external=True)
     get_queue().enqueue(
