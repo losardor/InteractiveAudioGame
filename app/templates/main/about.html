@@ -1,11 +1,136 @@
-{% import 'macros/page_macros.html' as page %}
 {% extends 'layouts/base.html' %}
 
-{% block content %}
-    <div class="ui text container">
-        <h1>About</h1>
-        {{ page.render_inline_editor(editable_html_obj, current_user) }}
-    </div>
+{% block custom_head_tags %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #1C1C2E;
+    --bg-surface: #252540;
+    --teal: #3CC8A0;
+    --coral: #E8734A;
+    --text-primary: #F0EDE8;
+    --text-muted: #8E8EA0;
+  }
 
-    <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+  body {
+    background-color: #1C1C2E !important;
+    color: #F0EDE8 !important;
+  }
+
+  .ui.navigation.grid {
+    margin-bottom: 0 !important;
+  }
+
+  /* ── Page header ── */
+  .sm-about-header {
+    text-align: center;
+    padding: 6rem 1.5rem 3rem;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 55%, rgba(60, 200, 160, 0.05) 0%, transparent 70%),
+      var(--bg-deep);
+  }
+
+  .sm-about-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .sm-about-header p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* ── Content sections ── */
+  .sm-about-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .sm-about-section {
+    margin-bottom: 3rem;
+  }
+
+  .sm-about-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .sm-about-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+  }
+
+  .sm-about-section p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .sm-about-section a {
+    color: var(--teal);
+    text-decoration: none;
+  }
+
+  .sm-about-section a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Footer ── */
+  .sm-footer {
+    background-color: var(--bg-deep);
+    border-top: 1px solid var(--bg-surface);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .sm-footer p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page header -->
+<section class="sm-about-header">
+  <h1>About Soundmaze</h1>
+  <p>We believe stories are best told out loud.</p>
+</section>
+
+<!-- Content -->
+<div class="sm-about-body">
+  <div class="sm-about-section">
+    <h2>What is Soundmaze</h2>
+    <p>Soundmaze is an interactive audiobook platform where every listener is also a protagonist. Stories branch at key moments — and the path you choose is yours alone.</p>
+  </div>
+
+  <div class="sm-about-section">
+    <h2>Our Mission</h2>
+    <p>We're building the missing middle ground between passive audiobooks and screen-heavy games. An experience that respects your attention, works without looking at your phone, and puts the story first.</p>
+  </div>
+
+  <div class="sm-about-section">
+    <h2>Where We Are</h2>
+    <p>Soundmaze is currently in early development. The platform is live and accepting its first readers. If you'd like to get in touch, write to us at <a href="mailto:hello@soundmaze.it">hello@soundmaze.it</a>.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="sm-footer">
+  <p>&copy; 2025 Soundmaze &middot; Built with Flask &amp; PostgreSQL</p>
+</footer>
 {% endblock %}
