@@ -196,13 +196,19 @@
     {% endif %}
     {% endif %}
 
+    <div id="transition-panel" style="display:none;">
+        <div class="no-audio-text" id="transition-text"></div>
+        <a id="continue-btn" class="choice-btn" style="margin-top:16px;">Continue &rarr;</a>
+    </div>
+
     {% if options %}
     <div id="choices" class="{% if audio_url %}hidden{% else %}visible{% endif %}">
         {% for option in options %}
-        <a class="choice-btn"
-           href="{{ url_for('books.play_waypoint', book_id=book.id, waypoint_id=option.destinationWaypoint_id) }}">
+        <button class="choice-btn"
+            data-href="{{ url_for('books.play_waypoint', book_id=book.id, waypoint_id=option.destinationWaypoint_id) }}"
+            data-transition="{{ option.transition_text or '' }}">
             {{ option.linkText }}
-        </a>
+        </button>
         {% endfor %}
     </div>
 
@@ -266,6 +272,24 @@
                 ? 'Hide transcript' : 'Read transcript';
         });
     }
+
+    /* Transition text: show narration before navigating */
+    document.querySelectorAll('.choice-btn[data-href]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var href = btn.dataset.href;
+            var transition = btn.dataset.transition;
+            if (transition) {
+                document.getElementById('choices').style.display = 'none';
+                if (skipBtn) skipBtn.style.display = 'none';
+                var panel = document.getElementById('transition-panel');
+                document.getElementById('transition-text').textContent = transition;
+                document.getElementById('continue-btn').href = href;
+                panel.style.display = 'block';
+            } else {
+                window.location.href = href;
+            }
+        });
+    });
 })();
 </script>
 {% endblock %}

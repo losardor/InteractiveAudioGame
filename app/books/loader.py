@@ -48,7 +48,8 @@ class BookLoader():
             for opt in wp["options"]:
                 option_dict= {"sourceWaypoint_id":self.wp_mapping[wp["id"]],
                         "destinationWaypoint_id":self.wp_mapping[opt["destinationWaypoint_id"]],
-                        "linkText":opt["linkText"]}
+                        "linkText":opt["linkText"],
+                        "transition_text":opt.get("transition_text")}
                 opt = Option(**option_dict)
                 db.session.add(opt)
                 db.session.flush()

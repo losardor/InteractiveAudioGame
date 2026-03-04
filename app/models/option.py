@@ -7,3 +7,4 @@ class Option(db.Model):
     sourceWaypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
     destinationWaypoint_id = db.Column(db.Integer, db.ForeignKey('waypoints.id'))
     linkText = db.Column(db.Text)
+    transition_text = db.Column(db.Text, nullable=True)
