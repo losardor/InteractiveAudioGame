@@ -10,5 +10,7 @@ COPY app/static/audio/demo/ app/static/audio/demo/
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY . .
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn", "manage:app"]

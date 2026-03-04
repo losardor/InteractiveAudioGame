@@ -1,17 +1,282 @@
 {% extends 'layouts/base.html' %}
 
+{% block custom_head_tags %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #1C1C2E;
+    --bg-surface: #252540;
+    --teal: #3CC8A0;
+    --coral: #E8734A;
+    --text-primary: #F0EDE8;
+    --text-muted: #8E8EA0;
+  }
+
+  /* Override Semantic UI body defaults for this page only */
+  body {
+    background-color: #1C1C2E !important;
+    color: #F0EDE8 !important;
+  }
+  /* Remove Semantic UI's default padding-top that pushes content below nav */
+  .ui.navigation.grid {
+    margin-bottom: 0 !important;
+  }
+
+  /* ── Hero ── */
+  .sm-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 55%, rgba(60, 200, 160, 0.05) 0%, transparent 70%),
+      var(--bg-deep);
+    padding: 2rem 1.5rem;
+  }
+
+  .sm-hero-inner {
+    max-width: 700px;
+  }
+
+  .sm-welcome {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(60, 200, 160, 0.7);
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .sm-headline {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 3.5rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem 0;
+  }
+
+  .sm-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 auto 2.5rem auto;
+    max-width: 540px;
+  }
+
+  .sm-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .sm-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .sm-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .sm-btn--primary {
+    background-color: var(--teal);
+    color: var(--bg-deep);
+    border: 2px solid var(--teal);
+  }
+
+  .sm-btn--primary:hover {
+    box-shadow: 0 4px 20px rgba(60, 200, 160, 0.3);
+    color: var(--bg-deep);
+  }
+
+  .sm-btn--ghost {
+    background-color: transparent;
+    color: var(--coral);
+    border: 2px solid var(--coral);
+  }
+
+  .sm-btn--ghost:hover {
+    box-shadow: 0 4px 20px rgba(232, 115, 74, 0.25);
+    color: var(--coral);
+  }
+
+  /* ── Features ── */
+  .sm-features {
+    background-color: var(--bg-deep);
+    padding: 6rem 1.5rem;
+  }
+
+  .sm-features-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 3.5rem 0;
+  }
+
+  .sm-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .sm-card {
+    background-color: var(--bg-surface);
+    border: 1px solid rgba(60, 200, 160, 0.1);
+    border-radius: 12px;
+    padding: 2.25rem 1.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .sm-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .sm-card-icon {
+    display: block;
+    margin-bottom: 1.25rem;
+    color: var(--teal);
+  }
+
+  .sm-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .sm-card-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* ── Footer ── */
+  .sm-footer {
+    background-color: var(--bg-deep);
+    border-top: 1px solid var(--bg-surface);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .sm-footer p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sm-headline {
+      font-size: 2.4rem;
+    }
+
+    .sm-subtitle {
+      font-size: 1.05rem;
+    }
+
+    .sm-cards {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+    }
+
+    .sm-features {
+      padding: 4rem 1.5rem;
+    }
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="ui text container">
-      <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }} {% endif %},</h1>
-        <p>Welcome to SoundMaze. Soon you will be able to stop lookng at the screen and immerse yourself in a rich universe made of stories</p>
+<!-- Hero -->
+<section class="sm-hero">
+  <div class="sm-hero-inner">
+    {% if current_user.is_authenticated %}
+      <p class="sm-welcome">Welcome back, {{ current_user.first_name }}</p>
+    {% endif %}
 
-        <p>This is <a href="http://hack4impact.org">Hack4Impact</a>'s web application template. We'll use this as a
-        foundation for each of our <a href="http://flask.pocoo.org">Flask</a> projects. The goal is to reduce the work
-        necessary to get a new project off the ground, by providing boilerplate code (such as account management
-        facilities), as well as uncontroversial and extensible defaults. We have integrated an
-        <a href="http://sass-lang.com">SCSS</a>-based asset pipeline based around a (fantastic!) framework
-        called <a href="http://semantic-ui.com">Semantic UI</a>. Much of this code is appropriated from the examples
-        in Miguel Grinberg's book, <a href="http://flaskbook.com"><em>Flask Web Development</em></a>.</p>
+    <h1 class="sm-headline">Choose Your Own Path</h1>
+    <p class="sm-subtitle">Interactive audiobooks where your choices shape the story. No screen required.</p>
 
+    <div class="sm-buttons">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('books.index') }}" class="sm-btn sm-btn--primary">Start Listening</a>
+      {% else %}
+        <a href="{{ url_for('account.login') }}" class="sm-btn sm-btn--primary">Start Listening</a>
+      {% endif %}
+      <a href="#features" class="sm-btn sm-btn--ghost">Learn More</a>
     </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="sm-features" id="features">
+  <h2 class="sm-features-heading">A new kind of story</h2>
+
+  <div class="sm-cards">
+    <!-- Audio-first -->
+    <div class="sm-card">
+      <svg class="sm-card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z"/>
+        <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5z"/>
+      </svg>
+      <h3 class="sm-card-title">Audio-first</h3>
+      <p class="sm-card-text">Every story is narrated. Close your eyes and let the world come to you.</p>
+    </div>
+
+    <!-- Your choices matter -->
+    <div class="sm-card">
+      <svg class="sm-card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="6" y1="3" x2="6" y2="15"/>
+        <circle cx="18" cy="6" r="3"/>
+        <circle cx="6" cy="18" r="3"/>
+        <path d="M18 9a9 9 0 0 1-9 9"/>
+      </svg>
+      <h3 class="sm-card-title">Your choices matter</h3>
+      <p class="sm-card-text">At key moments, you decide where the story goes. Every path is different.</p>
+    </div>
+
+    <!-- Track your journey -->
+    <div class="sm-card">
+      <svg class="sm-card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+        <line x1="9" y1="3" x2="9" y2="18"/>
+        <line x1="15" y1="6" x2="15" y2="21"/>
+      </svg>
+      <h3 class="sm-card-title">Track your journey</h3>
+      <p class="sm-card-text">Your unique path through the story is yours to keep and revisit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="sm-footer">
+  <p>&copy; 2025 Soundmaze &middot; Built with Flask &amp; PostgreSQL</p>
+</footer>
 {% endblock %}
