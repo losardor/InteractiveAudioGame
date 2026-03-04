@@ -9,3 +9,4 @@ class TextContent(db.Model):
     content = db.Column(db.Text)
     audio_url = db.Column(db.String(500), nullable=True)
     audio_duration = db.Column(db.Float, nullable=True)
+    sound_note = db.Column(db.String(500), nullable=True)

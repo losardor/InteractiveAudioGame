@@ -20,9 +20,14 @@ class BookLoader():
 
     def load(self):
         self._create_book(**self.book_dict)
-        self._create_wps(**self.book_dict)
-        self._create_options(**self.book_dict)
-        self._create_content(**self.book_dict)
+        if self.book_dict.get("schema_version") == "2.0":
+            self._create_wps_v2(**self.book_dict)
+            self._create_options_v2(**self.book_dict)
+            self._create_content_v2(**self.book_dict)
+        else:
+            self._create_wps(**self.book_dict)
+            self._create_options(**self.book_dict)
+            self._create_content(**self.book_dict)
 
         db.session.commit()
 
@@ -63,7 +68,42 @@ class BookLoader():
              db.session.add(cnt)
              db.session.flush()
 
+    def _create_wps_v2(self, waypoints, start_waypoint_id, **kwargs):
+        for wp in waypoints:
+            new_wp = Waypoint(
+                book_id=self.book.id,
+                start=(wp["id"] == start_waypoint_id))
+            db.session.add(new_wp)
+            db.session.flush()
+            self.wp_mapping[wp["id"]] = new_wp.id
 
+    def _create_options_v2(self, waypoints, **kwargs):
+        for wp in waypoints:
+            for opt in wp["options"]:
+                option = Option(
+                    sourceWaypoint_id=self.wp_mapping[wp["id"]],
+                    destinationWaypoint_id=self.wp_mapping[opt["destination_id"]],
+                    linkText=opt["link_text"])
+                db.session.add(option)
+                db.session.flush()
+
+    def _create_content_v2(self, waypoints, content, **kwargs):
+        content_by_id = {c["id"]: c for c in content}
+        for wp in waypoints:
+            content_block = content_by_id[wp["content_id"]]
+            sound_note = content_block.get("sound_note")
+            audio_url = None
+            if sound_note and sound_note.lower().endswith(
+                    ('.mp3', '.ogg', '.wav')):
+                audio_url = '/static/audio/{}/{}'.format(
+                    self.book.id, sound_note)
+            cnt = TextContent(
+                waypoint_id=self.wp_mapping[wp["id"]],
+                content=content_block["narration"],
+                sound_note=sound_note,
+                audio_url=audio_url)
+            db.session.add(cnt)
+            db.session.flush()
 
 
 class JsonFileBookLoader(BookLoader):
