@@ -3,6 +3,7 @@ webassets-external/
 .DS_Store
 *.pyc
 *.pyo
+__pycache__/
 env
 venv
 *.env
