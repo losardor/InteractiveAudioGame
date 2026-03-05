@@ -1,0 +1,15 @@
+config.env
+.env
+.git/
+*.pyc
+__pycache__/
+.DS_Store
+*.sqlite
+venv/
+env/
+.github/
+docker/
+!docker/entrypoint.sh
+tests/
+*.md
+dump.rdb

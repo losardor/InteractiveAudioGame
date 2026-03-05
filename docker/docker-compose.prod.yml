@@ -1,0 +1,68 @@
+services:
+  flask:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      REDISTOGO_URL: http://redis:6379
+      FLASK_CONFIG: production
+      FLASK_APP: manage
+      DATABASE_URL: ${DATABASE_URL}
+      APP_NAME: ${APP_NAME}
+      MAIL_SERVER: smtp.sendgrid.net
+      MAIL_PORT: 587
+      MAIL_USE_TLS: "True"
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    command: ["flask", "run-worker"]
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      REDISTOGO_URL: http://redis:6379
+      FLASK_CONFIG: production
+      FLASK_APP: manage
+      DATABASE_URL: ${DATABASE_URL}
+      APP_NAME: ${APP_NAME}
+      MAIL_SERVER: smtp.sendgrid.net
+      MAIL_PORT: 587
+      MAIL_USE_TLS: "True"
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+
+volumes:
+  pgdata_prod:

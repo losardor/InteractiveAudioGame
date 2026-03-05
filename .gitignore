@@ -6,7 +6,8 @@ webassets-external/
 env
 venv
 *.env
-env*
+env/
+.env*
 dist
 *.egg
 *.egg-info
