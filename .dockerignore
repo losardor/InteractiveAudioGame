@@ -10,6 +10,6 @@ env/
 .github/
 docker/
 !docker/entrypoint.sh
-tests/
+# tests/ — included so 'flask test' works in the production image for smoke-testing
 *.md
 dump.rdb
