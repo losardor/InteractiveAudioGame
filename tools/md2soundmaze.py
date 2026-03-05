@@ -105,7 +105,10 @@ def parse_option(lines):
         elif in_narration and line.strip():
             narration_parts.append(line.strip())
 
-    opt['narration'] = '\n\n'.join(narration_parts)
+    narration = '\n\n'.join(narration_parts)
+    # Strip trailing production note in square brackets
+    narration = re.sub(r'\s*\[.*?\]\s*$', '', narration, flags=re.DOTALL).strip()
+    opt['narration'] = narration
     return opt
 
 
