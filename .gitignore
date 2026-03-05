@@ -6,6 +6,7 @@ webassets-external/
 env
 venv
 *.env
+config.env
 env/
 .env*
 dist

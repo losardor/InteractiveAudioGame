@@ -20,10 +20,10 @@ class Config:
         SECRET_KEY = 'SECRET_KEY_ENV_VAR_NOT_SET'
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
     # Email
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
-    MAIL_PORT = os.environ.get('MAIL_PORT', 587)
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', True)
-    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', False)
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtps.aruba.it')
+    MAIL_PORT = os.environ.get('MAIL_PORT', 465)
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', False)
+    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', True)
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
@@ -70,8 +70,7 @@ class Config:
         if mail_enabled and not os.environ.get('MAIL_DEFAULT_SENDER'):
             logger.warning(
                 'CONFIG WARNING: MAIL_ENABLED=True but MAIL_DEFAULT_SENDER '
-                'is not set. Emails will have a malformed sender and may be '
-                'rejected by SendGrid.'
+                'is not set. Emails will have a malformed sender and may fail.'
             )
 
         if os.environ.get('SECRET_KEY') is None:
