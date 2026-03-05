@@ -15,4 +15,5 @@ dist
 *.sqlite
 .idea
 dump.rdb
+test_smtp.py
 .vscode/

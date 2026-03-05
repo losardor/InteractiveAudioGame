@@ -163,5 +163,42 @@ def setup_demo():
     print(f'Demo ready: 1 book, {wp_count} waypoints, {audio_count} audio files')
 
 
+@app.cli.command('test-email')
+@click.option('--to', default=None, help='Recipient address (default: ADMIN_EMAIL)')
+def test_email(to):
+    """Send a test email to verify SMTP configuration."""
+    from datetime import datetime
+    from flask_mail import Message
+    from app import mail
+
+    recipient = to or app.config.get('ADMIN_EMAIL')
+    if not recipient:
+        print('\u2717 Failed: no recipient — pass --to or set ADMIN_EMAIL')
+        return
+
+    print('Mail config:')
+    print(f'  MAIL_SERVER:         {app.config.get("MAIL_SERVER")}')
+    print(f'  MAIL_PORT:           {app.config.get("MAIL_PORT")}')
+    print(f'  MAIL_USE_TLS:        {app.config.get("MAIL_USE_TLS")}')
+    print(f'  MAIL_USE_SSL:        {app.config.get("MAIL_USE_SSL")}')
+    print(f'  MAIL_USERNAME:       {app.config.get("MAIL_USERNAME")}')
+    print(f'  MAIL_DEFAULT_SENDER: {app.config.get("MAIL_DEFAULT_SENDER")}')
+    print(f'  EMAIL_SENDER:        {app.config.get("EMAIL_SENDER")}')
+    print()
+
+    try:
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        flask_config = os.getenv('FLASK_CONFIG') or 'default'
+        msg = Message(
+            subject='Soundmaze SMTP Test',
+            sender=app.config['EMAIL_SENDER'],
+            recipients=[recipient])
+        msg.body = f'This is a test email sent at {now} from config={flask_config}'
+        mail.send(msg)
+        print(f'\u2713 Email sent successfully to {recipient}')
+    except Exception as e:
+        print(f'\u2717 Failed: {e}')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

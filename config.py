@@ -8,7 +8,7 @@ if os.path.exists('config.env'):
     for line in open('config.env'):
         var = line.strip().split('=')
         if len(var) == 2:
-            os.environ[var[0]] = var[1].replace("\"", "")
+            os.environ[var[0]] = var[1].replace("\"", "").replace("$$", "$")
 
 
 class Config:
@@ -21,9 +21,9 @@ class Config:
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtps.aruba.it')
-    MAIL_PORT = os.environ.get('MAIL_PORT', 465)
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', False)
-    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', True)
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'False').lower() == 'true'
+    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', 'True').lower() == 'true'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
