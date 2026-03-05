@@ -8,19 +8,19 @@ services:
       REDISTOGO_URL: http://redis:6379
       FLASK_CONFIG: production
       FLASK_APP: manage
-      DATABASE_URL: ${DATABASE_URL}
-      APP_NAME: ${APP_NAME}
-      MAIL_SERVER: smtps.aruba.it
-      MAIL_PORT: 465
-      MAIL_USE_TLS: "False"
-      MAIL_USE_SSL: "True"
-      MAIL_USERNAME: ${MAIL_USERNAME}
-      MAIL_PASSWORD: ${MAIL_PASSWORD}
-      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      APP_NAME: ${APP_NAME:-Soundmaze}
+      MAIL_SERVER: ${MAIL_SERVER:-smtps.aruba.it}
+      MAIL_PORT: ${MAIL_PORT:-465}
+      MAIL_USE_TLS: ${MAIL_USE_TLS:-False}
+      MAIL_USE_SSL: ${MAIL_USE_SSL:-True}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER:-}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       - db
       - redis
@@ -36,35 +36,48 @@ services:
       REDISTOGO_URL: http://redis:6379
       FLASK_CONFIG: production
       FLASK_APP: manage
-      DATABASE_URL: ${DATABASE_URL}
-      APP_NAME: ${APP_NAME}
-      MAIL_SERVER: smtps.aruba.it
-      MAIL_PORT: 465
-      MAIL_USE_TLS: "False"
-      MAIL_USE_SSL: "True"
-      MAIL_USERNAME: ${MAIL_USERNAME}
-      MAIL_PASSWORD: ${MAIL_PASSWORD}
-      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER}
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      APP_NAME: ${APP_NAME:-Soundmaze}
+      MAIL_SERVER: ${MAIL_SERVER:-smtps.aruba.it}
+      MAIL_PORT: ${MAIL_PORT:-465}
+      MAIL_USE_TLS: ${MAIL_USE_TLS:-False}
+      MAIL_USE_SSL: ${MAIL_USE_SSL:-True}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER:-}
     depends_on:
       - db
       - redis
     restart: unless-stopped
 
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - flask
+    restart: unless-stopped
+
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - pgdata_prod:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     restart: unless-stopped
 
 volumes:
-  pgdata_prod:
+  pgdata:
+  caddy_data:
+  caddy_config:

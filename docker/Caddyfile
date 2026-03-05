@@ -1,0 +1,3 @@
+app.soundmaze.it {
+    reverse_proxy flask:8000
+}
