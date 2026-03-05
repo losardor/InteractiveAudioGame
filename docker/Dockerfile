@@ -13,4 +13,4 @@ RUN chmod +x /entrypoint.sh
 COPY . .
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["gunicorn", "manage:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "manage:app"]
