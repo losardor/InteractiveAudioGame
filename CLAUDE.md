@@ -291,6 +291,12 @@ MODULE: session-tracking (TO BE CREATED)
 
 MODULE: api (TO BE CREATED)
   Purpose: REST API layer for frontend/mobile consumption
+
+MODULE: authoring-tools (TO BE CREATED)
+  Purpose: Story authoring pipeline — Markdown skeleton parser, JSON generator, consistency checker
+  Files: tools/consistency_checker.py, tools/md2soundmaze.py, tools/story_validator.py
+  Input format: story.md (Markdown skeleton with fixed section headers)
+  Output: Soundmaze JSON + consistency_report.json
 ```
 
 ---

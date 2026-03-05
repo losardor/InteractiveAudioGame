@@ -64,6 +64,23 @@ Items are roughly prioritized within each section. Move items to CHANGELOG.md wh
 - [ ] Implement library/explore page with filtering
 - [ ] Bottom navigation bar
 
+## Content Authoring Toolchain
+
+### Phase 1: Markdown pipeline (immediate)
+- [ ] Define Markdown schema for story skeleton (section headers as fixed parse tokens)
+- [ ] Build/extend `md2soundmaze.py` to parse the skeleton format into Soundmaze JSON
+- [ ] Implement schema validator with clear author-facing error messages (e.g. "Missing '### Narration' under Choice 3")
+- [ ] Build `tools/consistency_checker.py` — DFS path traversal + one Claude API call per path
+- [ ] Test full pipeline: `story.md` → `md2soundmaze.py` → `story.json` → `consistency_checker.py` → `consistency_report.json`
+- [ ] Write first real story in skeleton format: *The Soldier and the Sìthean*
+
+### Phase 1.5: Web authoring form (when onboarding non-technical authors)
+- [ ] Design guided web form at `/author` — same fields as the PDF skeleton template
+- [ ] Form submission generates JSON directly (no intermediate file format)
+- [ ] Trigger consistency check server-side on submit; display report in browser
+- [ ] Associate submitted stories with user accounts (draft saving, edit later)
+- [ ] Decision: build this only after the listener experience has a working version
+
 ## Voice Input (stretch)
 
 - [ ] Browser Speech Recognition API for choice selection
