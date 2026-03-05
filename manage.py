@@ -27,8 +27,9 @@ def test():
     """Run the unit tests."""
     import unittest
 
-    test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tests')
-    tests = unittest.TestLoader().discover(test_dir)
+    project_dir = os.path.dirname(os.path.abspath(__file__))
+    test_dir = os.path.join(project_dir, 'tests')
+    tests = unittest.TestLoader().discover(start_dir=test_dir, top_level_dir=project_dir)
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
