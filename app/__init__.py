@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import Flask
@@ -49,6 +50,19 @@ def create_app(config):
     # not using sqlalchemy event system, hence disabling it
 
     Config[config_name].init_app(app)
+
+    # Configure logging — single StreamHandler (stdout) for all environments.
+    # Docker captures stdout for both dev and production — no file handlers needed.
+    if not app.logger.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter(
+            '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+        ))
+        app.logger.addHandler(handler)
+
+    log_level = logging.DEBUG if app.config.get('DEBUG') else logging.INFO
+    app.logger.setLevel(log_level)
+    app.logger.info('Soundmaze starting — config=%s', config_name)
 
     # Set up extensions
     mail.init_app(app)

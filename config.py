@@ -60,6 +60,26 @@ class Config:
     def init_app(app):
         pass
 
+    @classmethod
+    def validate(cls, app):
+        """Log warnings for dangerous misconfigurations at startup."""
+        import logging
+        logger = logging.getLogger(__name__)
+
+        mail_enabled = bool(os.environ.get('MAIL_USERNAME'))
+        if mail_enabled and not os.environ.get('MAIL_DEFAULT_SENDER'):
+            logger.warning(
+                'CONFIG WARNING: MAIL_ENABLED=True but MAIL_DEFAULT_SENDER '
+                'is not set. Emails will have a malformed sender and may be '
+                'rejected by SendGrid.'
+            )
+
+        if os.environ.get('SECRET_KEY') is None:
+            logger.warning(
+                'CONFIG WARNING: SECRET_KEY is not set. Using insecure '
+                'default. This MUST be set in production.'
+            )
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -69,6 +89,8 @@ class DevelopmentConfig(Config):
 
     @classmethod
     def init_app(cls, app):
+        Config.init_app(app)
+        Config.validate(app)
         print('THIS APP IS IN DEBUG MODE. \
                 YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
@@ -93,6 +115,7 @@ class ProductionConfig(Config):
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
+        Config.validate(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
 

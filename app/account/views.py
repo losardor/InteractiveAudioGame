@@ -25,8 +25,12 @@ from app.account.forms import (
     RequestResetPasswordForm,
     ResetPasswordForm,
 )
+import logging
+
 from app.email import send_email
 from app.models import User
+
+logger = logging.getLogger(__name__)
 
 account = Blueprint('account', __name__)
 
@@ -36,13 +40,31 @@ def login():
     """Log in an existing user."""
     form = LoginForm()
     if form.validate_on_submit():
+        logger.debug('Login attempt for email=%s', form.email.data)
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.password_hash is not None and \
                 user.verify_password(form.password.data):
+            logger.info('Login successful: user_id=%s email=%s',
+                        user.id, user.email)
             login_user(user, form.remember_me.data)
             flash('You are now logged in. Welcome back!', 'success')
-            return redirect(request.args.get('next') or url_for('main.index'))
+            next_url = request.args.get('next')
+            if next_url and not next_url.startswith('/'):
+                logger.warning(
+                    'Login: rejected external next= redirect to %s', next_url)
+                next_url = None
+            return redirect(next_url or url_for('main.index'))
         else:
+            if user is None:
+                logger.warning('Login failed: unknown email=%s',
+                               form.email.data)
+            elif user.password_hash is None:
+                logger.warning('Login failed: no password set for user_id=%s',
+                               user.id)
+            else:
+                logger.warning(
+                    'Login failed: wrong password for user_id=%s email=%s',
+                    user.id, user.email)
             flash('Invalid email or password.', 'form-error')
     return render_template('account/login.html', form=form)
 
@@ -59,10 +81,13 @@ def register():
             password=form.password.data)
         db.session.add(user)
         db.session.commit()
+        logger.info('New user registered: user_id=%s email=%s confirmed=%s',
+                    user.id, user.email, user.confirmed)
         if current_app.config['MAIL_ENABLED']:
             token = user.generate_confirmation_token()
             confirm_link = url_for(
                 'account.confirm', token=token, _external=True)
+            logger.info('Enqueuing confirmation email to %s', user.email)
             get_queue().enqueue(
                 send_email,
                 recipient=user.email,
@@ -297,6 +322,8 @@ def before_request():
             and request.endpoint is not None \
             and not request.endpoint.startswith('account.') \
             and request.endpoint != 'static':
+        logger.debug('Unconfirmed user_id=%s blocked from endpoint=%s',
+                     current_user.id, request.endpoint)
         return redirect(url_for('account.unconfirmed'))
 
 
