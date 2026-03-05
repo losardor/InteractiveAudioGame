@@ -25,8 +25,10 @@ services:
       - FLASK_CONFIG=production
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - DEV_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - MAIL_SERVER=${MAIL_SERVER:-smtp.sendgrid.net}
-      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_SERVER=${MAIL_SERVER:-smtps.aruba.it}
+      - MAIL_PORT=${MAIL_PORT:-465}
+      - MAIL_USE_TLS=${MAIL_USE_TLS:-False}
+      - MAIL_USE_SSL=${MAIL_USE_SSL:-True}
       - MAIL_USERNAME=${MAIL_USERNAME:-}
       - MAIL_PASSWORD=${MAIL_PASSWORD:-}
       - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER:-}
@@ -65,6 +67,12 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - DEV_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - FLASK_APP=manage
+      - MAIL_SERVER=${MAIL_SERVER:-smtps.aruba.it}
+      - MAIL_PORT=${MAIL_PORT:-465}
+      - MAIL_USE_TLS=${MAIL_USE_TLS:-False}
+      - MAIL_USE_SSL=${MAIL_USE_SSL:-True}
+      - MAIL_USERNAME=${MAIL_USERNAME:-}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-}
       - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER:-}
       - APP_NAME=${APP_NAME:-Soundmaze}
     command: ["flask", "run-worker"]
