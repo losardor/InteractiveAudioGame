@@ -162,6 +162,45 @@
         background: rgba(232, 93, 4, 0.1);
         color: #e85d04;
     }
+    .player-nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 8px;
+    }
+    .player-nav-row .player-book-title {
+        margin-bottom: 0;
+        flex: 1;
+    }
+    .player-nav-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid #333355;
+        border-radius: 10px;
+        color: #8888aa;
+        font-size: 1.1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+        flex-shrink: 0;
+    }
+    .player-nav-btn:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: #5555aa;
+        color: #ccccdd;
+    }
+    .player-nav-btn:disabled,
+    .player-nav-btn[disabled] {
+        opacity: 0.25;
+        cursor: default;
+        pointer-events: none;
+    }
 </style>
 {% endblock %}
 
@@ -171,8 +210,16 @@
 <script>document.body.classList.add('player-page');</script>
 
 <div class="player-container">
-    <div class="player-book-title">
-        <a href="{{ url_for('books.book_info', book_id=book.id) }}">{{ book.name }}</a>
+    <div class="player-nav-row">
+        <button class="player-nav-btn" id="back-btn" onclick="history.back()" title="Go back">
+            <span>&#8592;</span>
+        </button>
+        <div class="player-book-title">
+            {{ book.name }}
+        </div>
+        <a class="player-nav-btn" href="{{ url_for('books.book_info', book_id=book.id) }}" title="Exit to book page">
+            <span>&#10005;</span>
+        </a>
     </div>
 
     {% if audio_url %}
@@ -234,6 +281,12 @@
     var transcriptBtn = document.getElementById('transcript-btn');
     var transcript = document.getElementById('transcript');
     var audioError = document.getElementById('audio-error');
+
+    // Disable back button if no previous history in this session
+    var backBtn = document.getElementById('back-btn');
+    if (backBtn && window.history.length <= 1) {
+        backBtn.disabled = true;
+    }
 
     function revealChoices() {
         if (choices) {
